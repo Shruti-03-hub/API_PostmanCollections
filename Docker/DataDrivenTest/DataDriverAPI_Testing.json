@@ -1,0 +1,144 @@
+{
+	"info": {
+		"_postman_id": "baa91685-82e1-4c3c-aef7-90f4637f3fb7",
+		"name": "DataDriverAPI_Testing",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "41844441"
+	},
+	"item": [
+		{
+			"name": "1-createMutlipleUsers",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"//validating expected data with actual data\r",
+							"pm.test(\"check Json response data\", function (){\r",
+							"    var jsondata=pm.response.json();\r",
+							"    pm.expect(jsondata.name).to.eql(pm.iterationData.get(\"name\"));\r",
+							"    pm.expect(jsondata.gender).to.eql(pm.iterationData.get(\"gender\"));\r",
+							"    pm.expect(jsondata.status).to.eql(pm.iterationData.get(\"status\"));\r",
+							"\r",
+							"    //fetching reuest data email\r",
+							"    const rawJsonbody=pm.request.body.raw;\r",
+							"\r",
+							"    //convertng JSOn to Javascript object\r",
+							"    const requestBody=JSON.parse(rawJsonbody);\r",
+							"    const expectedEmail=requestBody.email;\r",
+							"    console.log(\"Expected email is : \" +expectedEmail);\r",
+							"    pm.expect(jsondata.email).to.eql(expectedEmail);\r",
+							"});\r",
+							"\r",
+							"const res=pm.response.json();\r",
+							"const userID=res.id;\r",
+							"pm.variables.set(\"user_ID\",userID);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{TokenID}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "//fetching name gender and status from test data\r\n\r\n{\r\n    \"name\": \"{{name}}\",\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"gender\": \"{{gender}}\",\r\n    \"status\": \"{{status}}\"\r\n \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BaseURL}}/public/v2/users",
+					"host": [
+						"{{BaseURL}}"
+					],
+					"path": [
+						"public",
+						"v2",
+						"users"
+					],
+					"query": [
+						{
+							"key": "status",
+							"value": "active",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateUserStatus",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Is UserStatus update\", function(){\r",
+							"const jsondata=pm.response.json();\r",
+							"pm.expect(jsondata.status).to.eql(pm.iterationData.get(\"newstatus\"));\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{TokenID}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"status\" : \"{{newstatus}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://gorest.co.in/public/v2/users/{{user_ID}}",
+					"protocol": "https",
+					"host": [
+						"gorest",
+						"co",
+						"in"
+					],
+					"path": [
+						"public",
+						"v2",
+						"users",
+						"{{user_ID}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,23 @@
+[
+{
+    "name": "Pitt",
+    "gender": "male",
+    "status": "active"
+ 
+},
+{
+    "name": "Cora",
+    "gender": "female",
+    "status": "inactive"
+ 
+},{
+    "name": "Mary",
+    "gender": "female",
+    "status": "active"
+ 
+},{
+    "name": "Alice",
+    "gender": "male",
+    "status": "inactive"
+ 
+}]

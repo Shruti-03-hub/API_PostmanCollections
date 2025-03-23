@@ -1,0 +1,24 @@
+[
+	{
+	"name":"shruti",
+	"title": "IT"
+	},
+	{
+	"name":  "Kavyai",
+	"title": "Medicine",
+	"City" : "Kanpur"
+	},
+	{
+	"name":"Prunima",
+	"title": "Civil Engineer",
+	"City" : "Delhi",
+	"nature" : "Good",
+	"Subject" : [
+	"java" , "Python"]
+	},
+	{
+	"name":"Harsh",
+	"title": "Government",
+	"DOB" : "march"
+	}
+]

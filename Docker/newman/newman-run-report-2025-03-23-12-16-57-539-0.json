@@ -1,0 +1,3965 @@
+{
+  "collection": {
+    "_": {
+      "postman_id": "888822d0-dcd5-443f-846b-3dab4259c387",
+      "exporter_id": "41844441"
+    },
+    "item": [
+      {
+        "id": "aa6929e2-0fd1-4470-8e6d-38abae31f548",
+        "name": "1-CreateToken",
+        "request": {
+          "url": {
+            "path": [
+              "auth"
+            ],
+            "host": [
+              "{{BaseURL}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\r\n    \"username\" : \"{{username}}\",\r\n    \"password\" : \"{{password}}\"\r\n}",
+            "options": {
+              "raw": {
+                "language": "json"
+              }
+            }
+          }
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "cae22ac6-dcc1-43ed-8d5a-f0ed79181482",
+              "type": "text/javascript",
+              "packages": {},
+              "exec": [
+                "const res=pm.response.json();\r",
+                "const TokenId=res.token;\r",
+                "pm.environment.set(\"Token_ID\",TokenId);"
+              ],
+              "_lastExecutionId": "d3ba803e-5855-4766-82a1-448e8fd4dcca"
+            }
+          }
+        ]
+      },
+      {
+        "id": "c5b41f4f-f989-4de3-9c21-1c16d11fd467",
+        "name": "4-GetAllUsers",
+        "request": {
+          "url": {
+            "path": [
+              "booking"
+            ],
+            "host": [
+              "{{BaseURL}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "method": "GET"
+        },
+        "response": [],
+        "event": []
+      },
+      {
+        "id": "156ad985-aa28-4e04-8883-89df469a9b15",
+        "name": "2-CreateBooking",
+        "request": {
+          "url": {
+            "path": [
+              "booking"
+            ],
+            "host": [
+              "{{BaseURL}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\r\n    \"firstname\" : \"Priya\",\r\n    \"lastname\" : \"Sharma\",\r\n    \"totalprice\" : 1120,\r\n    \"depositpaid\" : true,\r\n    \"bookingdates\" : {\r\n        \"checkin\" : \"2018-01-01\",\r\n        \"checkout\" : \"2019-01-01\"\r\n    },\r\n    \"additionalneeds\" : \"Breakfast\"\r\n}",
+            "options": {
+              "raw": {
+                "language": "json"
+              }
+            }
+          }
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "d391ab14-aeeb-4672-a4b7-dc736b605d28",
+              "type": "text/javascript",
+              "packages": {},
+              "exec": [
+                "const res=pm.response.json();\r",
+                "const bookingId=res.bookingid;\r",
+                "pm.variables.set(\"BookingID\",bookingId);"
+              ],
+              "_lastExecutionId": "11632072-55c1-4636-b356-778b991c1849"
+            }
+          }
+        ]
+      },
+      {
+        "id": "3ecc03a0-3334-4329-a4f8-b864906bc1e5",
+        "name": "3-GetUserByID",
+        "request": {
+          "url": {
+            "path": [
+              "booking",
+              "{{Booking_ID}}"
+            ],
+            "host": [
+              "{{BaseURL}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "method": "GET"
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "prerequest",
+            "script": {
+              "id": "21cf7771-0d07-4aea-b4c7-4b3efa609087",
+              "type": "text/javascript",
+              "packages": {},
+              "exec": [
+                "//create booking using creating Boooking API and fetch booking ID\r",
+                "\r",
+                "pm.sendRequest({\r",
+                "    method:'POST',\r",
+                "    url: pm.environment.get(\"BaseURL\")+'/booking',\r",
+                "    header:{\r",
+                "        'Content-Type':'application/json'\r",
+                "    },\r",
+                "    body: {\r",
+                "        mode:'raw',\r",
+                "        raw:JSON.stringify({\r",
+                "            \"firstname\" : \"Priya\",\r",
+                "            \"lastname\" : \"Sharma\",\r",
+                "            \"totalprice\" : 1120,\r",
+                "            \"depositpaid\" : true,\r",
+                "            \"bookingdates\" : {\r",
+                "                \"checkin\" : \"2018-01-01\",\r",
+                "                \"checkout\" : \"2019-01-01\"\r",
+                "    },\r",
+                "            \"additionalneeds\" : \"Breakfast\"\r",
+                "        })\r",
+                "    }\r",
+                "    \r",
+                "},function(error, response)\r",
+                "{\r",
+                "    if(error)\r",
+                "    {\r",
+                "        console.log(error);\r",
+                "    }else{\r",
+                "        const resBody=JSON.parse(response.text());\r",
+                "        const bookingId=resBody.bookingid;\r",
+                "        console.log(\"Booking ID is :\" +bookingId);\r",
+                "        pm.variables.set(\"Booking_ID\", bookingId);\r",
+                "    }\r",
+                "});"
+              ],
+              "_lastExecutionId": "3e7fe769-d15c-4b3c-9c16-30d34fa017f2"
+            }
+          }
+        ]
+      },
+      {
+        "id": "ed87e6d2-2ed9-4c19-8e75-f4d3b4037110",
+        "name": "5-UpdateUserDetails",
+        "request": {
+          "url": {
+            "path": [
+              "booking",
+              "{{BookingID}}"
+            ],
+            "host": [
+              "{{BaseURL}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Cookie",
+              "value": "token={{New_TokenID}}"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Accept",
+              "value": "application/json"
+            }
+          ],
+          "method": "PUT",
+          "body": {
+            "mode": "raw",
+            "raw": "{\r\n    \"firstname\" : \"James\",\r\n    \"lastname\" : \"Cow\",\r\n    \"totalprice\" : 111,\r\n    \"depositpaid\" : true,\r\n    \"bookingdates\" : {\r\n        \"checkin\" : \"2018-01-01\",\r\n        \"checkout\" : \"2019-01-01\"\r\n    },\r\n    \"additionalneeds\" : \"Dinner\"\r\n}",
+            "options": {
+              "raw": {
+                "language": "json"
+              }
+            }
+          }
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "prerequest",
+            "script": {
+              "id": "fd23efcf-116c-46e5-99ec-567a89cd52d5",
+              "type": "text/javascript",
+              "packages": {},
+              "exec": [
+                "// //creating a token using auth api and fetching it from response\r",
+                "\r",
+                "// pm.sendRequest({\r",
+                "//     method:'POST',\r",
+                "//     url: pm.environment.get(\"BaseURL\")+'/auth',\r",
+                "//     header:{\r",
+                "//         'Content-Type':'application/json'\r",
+                "//     },\r",
+                "//     body:{\r",
+                "//         mode:'raw',\r",
+                "//         //stringify method is  used to convert JS object to JSON as here we have to pass JS object in JSON form\r",
+                "//         raw:JSON.stringify({\r",
+                "//             'username' : pm.environment.get(\"username\"),\r",
+                "//             'password' : pm.environment.get(\"password\")\r",
+                "//         })\r",
+                "//     }\r",
+                "// },function(error,response)\r",
+                "// {\r",
+                "//     if(error)\r",
+                "//     {\r",
+                "//         console.log(\"print error message : \"+error);\r",
+                "//     }else{\r",
+                "//         const resBody=JSON.parse(response.text());\r",
+                "//         const tokenID=resBody.token;\r",
+                "//         console.log(tokenID);\r",
+                "//         pm.variables.set(\"New_TokenID\", tokenID);\r",
+                "//     }\r",
+                "// })"
+              ],
+              "_lastExecutionId": "6ef92bac-96a7-457d-ba8e-118713075c97"
+            }
+          }
+        ]
+      },
+      {
+        "id": "e6015c79-0449-43d9-8e02-791570cdd308",
+        "name": "6-UpdatePartialData",
+        "request": {
+          "url": {
+            "path": [
+              "booking",
+              "{{BookingID}}"
+            ],
+            "host": [
+              "{{BaseURL}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Cookie",
+              "value": "token={{Token_ID}}"
+            }
+          ],
+          "method": "PATCH",
+          "body": {
+            "mode": "raw",
+            "raw": "{\r\n    \"firstname\" : \"James\",\r\n    \"lastname\" : \"Brown\",\r\n    \"totalprice\" : 5000\r\n\r\n}",
+            "options": {
+              "raw": {
+                "language": "json"
+              }
+            }
+          }
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "prerequest",
+            "script": {
+              "id": "1f6cf5e8-fcca-44d1-9791-120f1072a004",
+              "type": "text/javascript",
+              "packages": {},
+              "exec": [
+                "// //creating a token using auth api and fetching it from response\r",
+                "\r",
+                "// pm.sendRequest({\r",
+                "//     method:'POST',\r",
+                "//     url: pm.environment.get(\"BaseURL\")+'/auth',\r",
+                "//     header:{\r",
+                "//         'Content-Type':'application/json'\r",
+                "//     },\r",
+                "//     body:{\r",
+                "//         mode:'raw',\r",
+                "//         //stringify method is  used to convert JS object to JSON as here we have to pass JS object in JSON form\r",
+                "//         raw:JSON.stringify({\r",
+                "//             'username' : pm.environment.get(\"username\"),\r",
+                "//             'password' : pm.environment.get(\"password\")\r",
+                "//         })\r",
+                "//     }\r",
+                "// },function(error,response)\r",
+                "// {\r",
+                "//     if(error)\r",
+                "//     {\r",
+                "//         console.log(\"print error message : \"+error);\r",
+                "//     }else{\r",
+                "//         const resBody=JSON.parse(response.text());\r",
+                "//         const tokenID=resBody.token;\r",
+                "//         console.log(tokenID);\r",
+                "//         pm.variables.set(\"New_TokenID\", tokenID);\r",
+                "//     }\r",
+                "// })"
+              ],
+              "_lastExecutionId": "20f2d2a3-3753-443d-b40f-e5767472a64f"
+            }
+          }
+        ]
+      },
+      {
+        "id": "13627e12-2a5a-45e2-a6ee-d286be4749f1",
+        "name": "7-DeleteUserById",
+        "request": {
+          "url": {
+            "path": [
+              "booking",
+              "{{BookingID}}"
+            ],
+            "host": [
+              "{{BaseURL}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Cookie",
+              "value": "token={{Token_ID}}"
+            }
+          ],
+          "method": "DELETE"
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "prerequest",
+            "script": {
+              "id": "b80fc40d-2783-4ca2-9c7a-d3c5707fa036",
+              "type": "text/javascript",
+              "packages": {},
+              "exec": [
+                "// //creating a token using auth api and fetching it from response\r",
+                "\r",
+                "// pm.sendRequest({\r",
+                "//     method:'POST',\r",
+                "//     url: pm.environment.get(\"BaseURL\")+'/auth',\r",
+                "//     header:{\r",
+                "//         'Content-Type':'application/json'\r",
+                "//     },\r",
+                "//     body:{\r",
+                "//         mode:'raw',\r",
+                "//         //stringify method is  used to convert JS object to JSON as here we have to pass JS object in JSON form\r",
+                "//         raw:JSON.stringify({\r",
+                "//             'username' : pm.environment.get(\"username\"),\r",
+                "//             'password' : pm.environment.get(\"password\")\r",
+                "//         })\r",
+                "//     }\r",
+                "// },function(error,response)\r",
+                "// {\r",
+                "//     if(error)\r",
+                "//     {\r",
+                "//         console.log(\"print error message : \"+error);\r",
+                "//     }else{\r",
+                "//         const resBody=JSON.parse(response.text());\r",
+                "//         const tokenID=resBody.token;\r",
+                "//         console.log(tokenID);\r",
+                "//         pm.variables.set(\"New_TokenID\", tokenID);\r",
+                "//     }\r",
+                "// })"
+              ],
+              "_lastExecutionId": "1e4b415d-f3c9-401b-be5b-7dd53e4bdb09"
+            }
+          }
+        ]
+      }
+    ],
+    "event": [
+      {
+        "listen": "prerequest",
+        "script": {
+          "id": "989a0755-2a45-4175-b64d-beec1596c7d8",
+          "type": "text/javascript",
+          "packages": {},
+          "exec": [
+            ""
+          ],
+          "_lastExecutionId": "6ddf3739-c79b-45d6-a0eb-d05e88afa472"
+        }
+      },
+      {
+        "listen": "test",
+        "script": {
+          "id": "e31c603b-8022-4155-a30d-6ab9d5b1ff39",
+          "type": "text/javascript",
+          "packages": {},
+          "exec": [
+            "if(pm.info.requestName='5-UpdateUserDetails' ||'6-UpdatePartialData' ||'7-DeleteUserById')\r",
+            "{\r",
+            "    //creating a token using auth api and fetching it from response\r",
+            "\r",
+            "pm.sendRequest({\r",
+            "    method:'POST',\r",
+            "    url: pm.environment.get(\"BaseURL\")+'/auth',\r",
+            "    header:{\r",
+            "        'Content-Type':'application/json'\r",
+            "    },\r",
+            "    body:{\r",
+            "        mode:'raw',\r",
+            "        //stringify method is  used to convert JS object to JSON as here we have to pass JS object in JSON form\r",
+            "        raw:JSON.stringify({\r",
+            "            'username' : pm.environment.get(\"username\"),\r",
+            "            'password' : pm.environment.get(\"password\")\r",
+            "        })\r",
+            "    }\r",
+            "},function(error,response)\r",
+            "{\r",
+            "    if(error)\r",
+            "    {\r",
+            "        console.log(\"print error message : \"+error);\r",
+            "    }else{\r",
+            "        const resBody=JSON.parse(response.text());\r",
+            "        const tokenID=resBody.token;\r",
+            "        console.log(tokenID);\r",
+            "        pm.variables.set(\"New_TokenID\", tokenID);\r",
+            "    }\r",
+            "})\r",
+            "}"
+          ],
+          "_lastExecutionId": "ca5ab834-1fc1-46c4-8b71-7af274ef54a8"
+        }
+      }
+    ],
+    "variable": [],
+    "info": {
+      "_postman_id": "888822d0-dcd5-443f-846b-3dab4259c387",
+      "name": "Booking_API_workflow",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    }
+  },
+  "environment": {
+    "_": {
+      "postman_variable_scope": "environment",
+      "postman_exported_at": "2025-03-23T12:01:47.074Z",
+      "postman_exported_using": "Postman/11.37.3"
+    },
+    "id": "1f1275b4-a0cc-4d20-9fbe-841726577fe6",
+    "name": "Booking_Env",
+    "values": [
+      {
+        "type": "any",
+        "value": "https://restful-booker.herokuapp.com",
+        "key": "BaseURL"
+      },
+      {
+        "type": "any",
+        "value": "admin",
+        "key": "username"
+      },
+      {
+        "type": "any",
+        "value": "password123",
+        "key": "password"
+      },
+      {
+        "type": "any",
+        "value": "065950a8dd20abd",
+        "key": "Token_ID"
+      }
+    ]
+  },
+  "globals": {
+    "id": "2827df46-681a-4d6b-a233-5e5630cbedaa",
+    "values": []
+  },
+  "run": {
+    "stats": {
+      "iterations": {
+        "total": 1,
+        "pending": 0,
+        "failed": 0
+      },
+      "items": {
+        "total": 7,
+        "pending": 0,
+        "failed": 0
+      },
+      "scripts": {
+        "total": 20,
+        "pending": 0,
+        "failed": 0
+      },
+      "prerequests": {
+        "total": 7,
+        "pending": 0,
+        "failed": 0
+      },
+      "requests": {
+        "total": 15,
+        "pending": 0,
+        "failed": 0
+      },
+      "tests": {
+        "total": 7,
+        "pending": 0,
+        "failed": 0
+      },
+      "assertions": {
+        "total": 0,
+        "pending": 0,
+        "failed": 0
+      },
+      "testScripts": {
+        "total": 9,
+        "pending": 0,
+        "failed": 0
+      },
+      "prerequestScripts": {
+        "total": 11,
+        "pending": 0,
+        "failed": 0
+      }
+    },
+    "timings": {
+      "responseAverage": 481.4,
+      "responseMin": 245,
+      "responseMax": 3106,
+      "responseSd": 707.0105892653471,
+      "dnsAverage": 0,
+      "dnsMin": 0,
+      "dnsMax": 0,
+      "dnsSd": 0,
+      "firstByteAverage": 0,
+      "firstByteMin": 0,
+      "firstByteMax": 0,
+      "firstByteSd": 0,
+      "started": 1742732208195,
+      "completed": 1742732216965
+    },
+    "executions": [
+      {
+        "cursor": {
+          "position": 0,
+          "iteration": 0,
+          "length": 7,
+          "cycles": 1,
+          "empty": false,
+          "eof": false,
+          "bof": true,
+          "cr": false,
+          "ref": "df609b02-fdec-47aa-a830-da7d4dcbc330",
+          "httpRequestId": "ada5d69d-b0de-407b-9067-7793ff7a1046",
+          "scriptId": "e31c603b-8022-4155-a30d-6ab9d5b1ff39",
+          "execution": "c036b376-4717-4eb3-adda-88d6b6d96123"
+        },
+        "item": {
+          "id": "aa6929e2-0fd1-4470-8e6d-38abae31f548",
+          "name": "1-CreateToken",
+          "request": {
+            "url": {
+              "path": [
+                "auth"
+              ],
+              "host": [
+                "{{BaseURL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json; charset=utf-8"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\" : \"{{username}}\",\r\n    \"password\" : \"{{password}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "cae22ac6-dcc1-43ed-8d5a-f0ed79181482",
+                "type": "text/javascript",
+                "packages": {},
+                "exec": [
+                  "const res=pm.response.json();\r",
+                  "const TokenId=res.token;\r",
+                  "pm.environment.set(\"Token_ID\",TokenId);"
+                ],
+                "_lastExecutionId": "d3ba803e-5855-4766-82a1-448e8fd4dcca"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "https",
+            "path": [
+              "auth"
+            ],
+            "host": [
+              "restful-booker",
+              "herokuapp",
+              "com"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "5c5709e5-cd42-4c17-8a36-4a420c47ca94",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "restful-booker.herokuapp.com",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "45",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\"username\":\"admin\",\"password\":\"password123\"}"
+          }
+        },
+        "response": {
+          "id": "951a9650-4345-45b1-ae2d-d50663045e59",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Server",
+              "value": "Cowboy"
+            },
+            {
+              "key": "Report-To",
+              "value": "{\"group\":\"heroku-nel\",\"max_age\":3600,\"endpoints\":[{\"url\":\"https://nel.heroku.com/reports?ts=1742732210&sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&s=J1p2BM2VALunnfCeeoAsoI28lfGEHBDPDHtuY0hv4A4%3D\"}]}"
+            },
+            {
+              "key": "Reporting-Endpoints",
+              "value": "heroku-nel=https://nel.heroku.com/reports?ts=1742732210&sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&s=J1p2BM2VALunnfCeeoAsoI28lfGEHBDPDHtuY0hv4A4%3D"
+            },
+            {
+              "key": "Nel",
+              "value": "{\"report_to\":\"heroku-nel\",\"max_age\":3600,\"success_fraction\":0.005,\"failure_fraction\":0.05,\"response_headers\":[\"Via\"]}"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "27"
+            },
+            {
+              "key": "Etag",
+              "value": "W/\"1b-fGHoVNbKhi8tKSvgjQKLZM6DicQ\""
+            },
+            {
+              "key": "Date",
+              "value": "Sun, 23 Mar 2025 12:16:50 GMT"
+            },
+            {
+              "key": "Via",
+              "value": "1.1 vegur"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              116,
+              111,
+              107,
+              101,
+              110,
+              34,
+              58,
+              34,
+              52,
+              102,
+              52,
+              97,
+              97,
+              101,
+              57,
+              99,
+              50,
+              56,
+              55,
+              97,
+              101,
+              56,
+              101,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 265,
+          "responseSize": 27
+        },
+        "id": "2294d9b5-749c-42fc-b8e0-5f3876ee0b26"
+      },
+      {
+        "cursor": {
+          "position": 0,
+          "iteration": 0,
+          "length": 7,
+          "cycles": 1,
+          "empty": false,
+          "eof": false,
+          "bof": true,
+          "cr": false,
+          "ref": "df609b02-fdec-47aa-a830-da7d4dcbc330",
+          "httpRequestId": "ada5d69d-b0de-407b-9067-7793ff7a1046",
+          "scriptId": "e31c603b-8022-4155-a30d-6ab9d5b1ff39",
+          "execution": "c036b376-4717-4eb3-adda-88d6b6d96123"
+        },
+        "item": {
+          "id": "aa6929e2-0fd1-4470-8e6d-38abae31f548",
+          "name": "1-CreateToken",
+          "request": {
+            "url": {
+              "path": [
+                "auth"
+              ],
+              "host": [
+                "{{BaseURL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json; charset=utf-8"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\" : \"{{username}}\",\r\n    \"password\" : \"{{password}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "cae22ac6-dcc1-43ed-8d5a-f0ed79181482",
+                "type": "text/javascript",
+                "packages": {},
+                "exec": [
+                  "const res=pm.response.json();\r",
+                  "const TokenId=res.token;\r",
+                  "pm.environment.set(\"Token_ID\",TokenId);"
+                ],
+                "_lastExecutionId": "d3ba803e-5855-4766-82a1-448e8fd4dcca"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "https",
+            "path": [
+              "auth"
+            ],
+            "host": [
+              "restful-booker",
+              "herokuapp",
+              "com"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "5c5709e5-cd42-4c17-8a36-4a420c47ca94",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "restful-booker.herokuapp.com",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "45",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\"username\":\"admin\",\"password\":\"password123\"}"
+          }
+        },
+        "response": {
+          "id": "951a9650-4345-45b1-ae2d-d50663045e59",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Server",
+              "value": "Cowboy"
+            },
+            {
+              "key": "Report-To",
+              "value": "{\"group\":\"heroku-nel\",\"max_age\":3600,\"endpoints\":[{\"url\":\"https://nel.heroku.com/reports?ts=1742732210&sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&s=J1p2BM2VALunnfCeeoAsoI28lfGEHBDPDHtuY0hv4A4%3D\"}]}"
+            },
+            {
+              "key": "Reporting-Endpoints",
+              "value": "heroku-nel=https://nel.heroku.com/reports?ts=1742732210&sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&s=J1p2BM2VALunnfCeeoAsoI28lfGEHBDPDHtuY0hv4A4%3D"
+            },
+            {
+              "key": "Nel",
+              "value": "{\"report_to\":\"heroku-nel\",\"max_age\":3600,\"success_fraction\":0.005,\"failure_fraction\":0.05,\"response_headers\":[\"Via\"]}"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "27"
+            },
+            {
+              "key": "Etag",
+              "value": "W/\"1b-fGHoVNbKhi8tKSvgjQKLZM6DicQ\""
+            },
+            {
+              "key": "Date",
+              "value": "Sun, 23 Mar 2025 12:16:50 GMT"
+            },
+            {
+              "key": "Via",
+              "value": "1.1 vegur"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              116,
+              111,
+              107,
+              101,
+              110,
+              34,
+              58,
+              34,
+              52,
+              102,
+              52,
+              97,
+              97,
+              101,
+              57,
+              99,
+              50,
+              56,
+              55,
+              97,
+              101,
+              56,
+              101,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 265,
+          "responseSize": 27
+        },
+        "id": "2294d9b5-749c-42fc-b8e0-5f3876ee0b26"
+      },
+      {
+        "cursor": {
+          "ref": "b7070495-48d1-4d4d-82d1-e2928b8de1c6",
+          "length": 7,
+          "cycles": 1,
+          "position": 1,
+          "iteration": 0,
+          "httpRequestId": "da6e38cb-dac3-4b68-9c11-b894b48f2705",
+          "scriptId": "e31c603b-8022-4155-a30d-6ab9d5b1ff39",
+          "execution": "eb74a9d9-2770-46fe-b888-08ccb06e50bf"
+        },
+        "item": {
+          "id": "c5b41f4f-f989-4de3-9c21-1c16d11fd467",
+          "name": "4-GetAllUsers",
+          "request": {
+            "url": {
+              "path": [
+                "booking"
+              ],
+              "host": [
+                "{{BaseURL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "GET"
+          },
+          "response": [],
+          "event": []
+        },
+        "request": {
+          "url": {
+            "protocol": "https",
+            "path": [
+              "auth"
+            ],
+            "host": [
+              "restful-booker",
+              "herokuapp",
+              "com"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "cc6a19dc-7aa8-49d4-9a34-6e3f55e4631e",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "restful-booker.herokuapp.com",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "45",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\"username\":\"admin\",\"password\":\"password123\"}"
+          }
+        },
+        "response": {
+          "id": "b3858cbd-8906-4cfa-9ee7-76155f548456",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Server",
+              "value": "Cowboy"
+            },
+            {
+              "key": "Report-To",
+              "value": "{\"group\":\"heroku-nel\",\"max_age\":3600,\"endpoints\":[{\"url\":\"https://nel.heroku.com/reports?ts=1742732212&sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&s=rKmgLBU4cLahGa2Yx4ZfcA1648tSZgqcQ3%2FVKHKNyfw%3D\"}]}"
+            },
+            {
+              "key": "Reporting-Endpoints",
+              "value": "heroku-nel=https://nel.heroku.com/reports?ts=1742732212&sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&s=rKmgLBU4cLahGa2Yx4ZfcA1648tSZgqcQ3%2FVKHKNyfw%3D"
+            },
+            {
+              "key": "Nel",
+              "value": "{\"report_to\":\"heroku-nel\",\"max_age\":3600,\"success_fraction\":0.005,\"failure_fraction\":0.05,\"response_headers\":[\"Via\"]}"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "27"
+            },
+            {
+              "key": "Etag",
+              "value": "W/\"1b-1KPD13hQyUPrclk3l2AKxcM7jpc\""
+            },
+            {
+              "key": "Date",
+              "value": "Sun, 23 Mar 2025 12:16:52 GMT"
+            },
+            {
+              "key": "Via",
+              "value": "1.1 vegur"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              116,
+              111,
+              107,
+              101,
+              110,
+              34,
+              58,
+              34,
+              102,
+              97,
+              49,
+              97,
+              55,
+              50,
+              57,
+              99,
+              99,
+              55,
+              50,
+              52,
+              56,
+              50,
+              97,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 255,
+          "responseSize": 27
+        },
+        "id": "cc72c586-f1d8-4d10-b9ab-8d2888a4fe95"
+      },
+      {
+        "cursor": {
+          "ref": "b7070495-48d1-4d4d-82d1-e2928b8de1c6",
+          "length": 7,
+          "cycles": 1,
+          "position": 1,
+          "iteration": 0,
+          "httpRequestId": "da6e38cb-dac3-4b68-9c11-b894b48f2705",
+          "scriptId": "e31c603b-8022-4155-a30d-6ab9d5b1ff39",
+          "execution": "eb74a9d9-2770-46fe-b888-08ccb06e50bf"
+        },
+        "item": {
+          "id": "c5b41f4f-f989-4de3-9c21-1c16d11fd467",
+          "name": "4-GetAllUsers",
+          "request": {
+            "url": {
+              "path": [
+                "booking"
+              ],
+              "host": [
+                "{{BaseURL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "GET"
+          },
+          "response": [],
+          "event": []
+        },
+        "request": {
+          "url": {
+            "protocol": "https",
+            "path": [
+              "auth"
+            ],
+            "host": [
+              "restful-booker",
+              "herokuapp",
+              "com"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "cc6a19dc-7aa8-49d4-9a34-6e3f55e4631e",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "restful-booker.herokuapp.com",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "45",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\"username\":\"admin\",\"password\":\"password123\"}"
+          }
+        },
+        "response": {
+          "id": "b3858cbd-8906-4cfa-9ee7-76155f548456",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Server",
+              "value": "Cowboy"
+            },
+            {
+              "key": "Report-To",
+              "value": "{\"group\":\"heroku-nel\",\"max_age\":3600,\"endpoints\":[{\"url\":\"https://nel.heroku.com/reports?ts=1742732212&sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&s=rKmgLBU4cLahGa2Yx4ZfcA1648tSZgqcQ3%2FVKHKNyfw%3D\"}]}"
+            },
+            {
+              "key": "Reporting-Endpoints",
+              "value": "heroku-nel=https://nel.heroku.com/reports?ts=1742732212&sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&s=rKmgLBU4cLahGa2Yx4ZfcA1648tSZgqcQ3%2FVKHKNyfw%3D"
+            },
+            {
+              "key": "Nel",
+              "value": "{\"report_to\":\"heroku-nel\",\"max_age\":3600,\"success_fraction\":0.005,\"failure_fraction\":0.05,\"response_headers\":[\"Via\"]}"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "27"
+            },
+            {
+              "key": "Etag",
+              "value": "W/\"1b-1KPD13hQyUPrclk3l2AKxcM7jpc\""
+            },
+            {
+              "key": "Date",
+              "value": "Sun, 23 Mar 2025 12:16:52 GMT"
+            },
+            {
+              "key": "Via",
+              "value": "1.1 vegur"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              116,
+              111,
+              107,
+              101,
+              110,
+              34,
+              58,
+              34,
+              102,
+              97,
+              49,
+              97,
+              55,
+              50,
+              57,
+              99,
+              99,
+              55,
+              50,
+              52,
+              56,
+              50,
+              97,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 255,
+          "responseSize": 27
+        },
+        "id": "cc72c586-f1d8-4d10-b9ab-8d2888a4fe95"
+      },
+      {
+        "cursor": {
+          "ref": "727b3f1c-7072-4497-9151-1e496d1b3635",
+          "length": 7,
+          "cycles": 1,
+          "position": 2,
+          "iteration": 0,
+          "httpRequestId": "9292d4f6-be23-4b1c-9059-202770147c56",
+          "scriptId": "e31c603b-8022-4155-a30d-6ab9d5b1ff39",
+          "execution": "5c3c3758-b2a9-40c9-b8cb-e4496699330c"
+        },
+        "item": {
+          "id": "156ad985-aa28-4e04-8883-89df469a9b15",
+          "name": "2-CreateBooking",
+          "request": {
+            "url": {
+              "path": [
+                "booking"
+              ],
+              "host": [
+                "{{BaseURL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"firstname\" : \"Priya\",\r\n    \"lastname\" : \"Sharma\",\r\n    \"totalprice\" : 1120,\r\n    \"depositpaid\" : true,\r\n    \"bookingdates\" : {\r\n        \"checkin\" : \"2018-01-01\",\r\n        \"checkout\" : \"2019-01-01\"\r\n    },\r\n    \"additionalneeds\" : \"Breakfast\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "d391ab14-aeeb-4672-a4b7-dc736b605d28",
+                "type": "text/javascript",
+                "packages": {},
+                "exec": [
+                  "const res=pm.response.json();\r",
+                  "const bookingId=res.bookingid;\r",
+                  "pm.variables.set(\"BookingID\",bookingId);"
+                ],
+                "_lastExecutionId": "11632072-55c1-4636-b356-778b991c1849"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "https",
+            "path": [
+              "auth"
+            ],
+            "host": [
+              "restful-booker",
+              "herokuapp",
+              "com"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "97474eed-188a-4846-8502-e1040f657ba0",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "restful-booker.herokuapp.com",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "45",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\"username\":\"admin\",\"password\":\"password123\"}"
+          }
+        },
+        "response": {
+          "id": "5cbb4a3d-b18f-463d-86f9-0bce69d19dce",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Server",
+              "value": "Cowboy"
+            },
+            {
+              "key": "Report-To",
+              "value": "{\"group\":\"heroku-nel\",\"max_age\":3600,\"endpoints\":[{\"url\":\"https://nel.heroku.com/reports?ts=1742732212&sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&s=rKmgLBU4cLahGa2Yx4ZfcA1648tSZgqcQ3%2FVKHKNyfw%3D\"}]}"
+            },
+            {
+              "key": "Reporting-Endpoints",
+              "value": "heroku-nel=https://nel.heroku.com/reports?ts=1742732212&sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&s=rKmgLBU4cLahGa2Yx4ZfcA1648tSZgqcQ3%2FVKHKNyfw%3D"
+            },
+            {
+              "key": "Nel",
+              "value": "{\"report_to\":\"heroku-nel\",\"max_age\":3600,\"success_fraction\":0.005,\"failure_fraction\":0.05,\"response_headers\":[\"Via\"]}"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "27"
+            },
+            {
+              "key": "Etag",
+              "value": "W/\"1b-tqq4/iv4X0dZwLGoOn8oVRs29Uc\""
+            },
+            {
+              "key": "Date",
+              "value": "Sun, 23 Mar 2025 12:16:52 GMT"
+            },
+            {
+              "key": "Via",
+              "value": "1.1 vegur"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              116,
+              111,
+              107,
+              101,
+              110,
+              34,
+              58,
+              34,
+              101,
+              57,
+              54,
+              56,
+              101,
+              100,
+              57,
+              54,
+              53,
+              102,
+              55,
+              50,
+              54,
+              98,
+              97,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 280,
+          "responseSize": 27
+        },
+        "id": "cb926ce1-604a-4121-a5da-6b67f9eec2a2"
+      },
+      {
+        "cursor": {
+          "ref": "727b3f1c-7072-4497-9151-1e496d1b3635",
+          "length": 7,
+          "cycles": 1,
+          "position": 2,
+          "iteration": 0,
+          "httpRequestId": "9292d4f6-be23-4b1c-9059-202770147c56",
+          "scriptId": "e31c603b-8022-4155-a30d-6ab9d5b1ff39",
+          "execution": "5c3c3758-b2a9-40c9-b8cb-e4496699330c"
+        },
+        "item": {
+          "id": "156ad985-aa28-4e04-8883-89df469a9b15",
+          "name": "2-CreateBooking",
+          "request": {
+            "url": {
+              "path": [
+                "booking"
+              ],
+              "host": [
+                "{{BaseURL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"firstname\" : \"Priya\",\r\n    \"lastname\" : \"Sharma\",\r\n    \"totalprice\" : 1120,\r\n    \"depositpaid\" : true,\r\n    \"bookingdates\" : {\r\n        \"checkin\" : \"2018-01-01\",\r\n        \"checkout\" : \"2019-01-01\"\r\n    },\r\n    \"additionalneeds\" : \"Breakfast\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "d391ab14-aeeb-4672-a4b7-dc736b605d28",
+                "type": "text/javascript",
+                "packages": {},
+                "exec": [
+                  "const res=pm.response.json();\r",
+                  "const bookingId=res.bookingid;\r",
+                  "pm.variables.set(\"BookingID\",bookingId);"
+                ],
+                "_lastExecutionId": "11632072-55c1-4636-b356-778b991c1849"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "https",
+            "path": [
+              "auth"
+            ],
+            "host": [
+              "restful-booker",
+              "herokuapp",
+              "com"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "97474eed-188a-4846-8502-e1040f657ba0",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "restful-booker.herokuapp.com",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "45",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\"username\":\"admin\",\"password\":\"password123\"}"
+          }
+        },
+        "response": {
+          "id": "5cbb4a3d-b18f-463d-86f9-0bce69d19dce",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Server",
+              "value": "Cowboy"
+            },
+            {
+              "key": "Report-To",
+              "value": "{\"group\":\"heroku-nel\",\"max_age\":3600,\"endpoints\":[{\"url\":\"https://nel.heroku.com/reports?ts=1742732212&sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&s=rKmgLBU4cLahGa2Yx4ZfcA1648tSZgqcQ3%2FVKHKNyfw%3D\"}]}"
+            },
+            {
+              "key": "Reporting-Endpoints",
+              "value": "heroku-nel=https://nel.heroku.com/reports?ts=1742732212&sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&s=rKmgLBU4cLahGa2Yx4ZfcA1648tSZgqcQ3%2FVKHKNyfw%3D"
+            },
+            {
+              "key": "Nel",
+              "value": "{\"report_to\":\"heroku-nel\",\"max_age\":3600,\"success_fraction\":0.005,\"failure_fraction\":0.05,\"response_headers\":[\"Via\"]}"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "27"
+            },
+            {
+              "key": "Etag",
+              "value": "W/\"1b-tqq4/iv4X0dZwLGoOn8oVRs29Uc\""
+            },
+            {
+              "key": "Date",
+              "value": "Sun, 23 Mar 2025 12:16:52 GMT"
+            },
+            {
+              "key": "Via",
+              "value": "1.1 vegur"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              116,
+              111,
+              107,
+              101,
+              110,
+              34,
+              58,
+              34,
+              101,
+              57,
+              54,
+              56,
+              101,
+              100,
+              57,
+              54,
+              53,
+              102,
+              55,
+              50,
+              54,
+              98,
+              97,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 280,
+          "responseSize": 27
+        },
+        "id": "cb926ce1-604a-4121-a5da-6b67f9eec2a2"
+      },
+      {
+        "cursor": {
+          "ref": "bde97f7f-08dc-47d2-adb4-3b01105e4047",
+          "length": 7,
+          "cycles": 1,
+          "position": 3,
+          "iteration": 0,
+          "httpRequestId": "318bf0a3-9ef0-46fb-862e-3f99225d3976",
+          "scriptId": "e31c603b-8022-4155-a30d-6ab9d5b1ff39",
+          "execution": "d61e7538-8168-4585-9708-cb859c425735"
+        },
+        "item": {
+          "id": "3ecc03a0-3334-4329-a4f8-b864906bc1e5",
+          "name": "3-GetUserByID",
+          "request": {
+            "url": {
+              "path": [
+                "booking",
+                "{{Booking_ID}}"
+              ],
+              "host": [
+                "{{BaseURL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "GET"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "21cf7771-0d07-4aea-b4c7-4b3efa609087",
+                "type": "text/javascript",
+                "packages": {},
+                "exec": [
+                  "//create booking using creating Boooking API and fetch booking ID\r",
+                  "\r",
+                  "pm.sendRequest({\r",
+                  "    method:'POST',\r",
+                  "    url: pm.environment.get(\"BaseURL\")+'/booking',\r",
+                  "    header:{\r",
+                  "        'Content-Type':'application/json'\r",
+                  "    },\r",
+                  "    body: {\r",
+                  "        mode:'raw',\r",
+                  "        raw:JSON.stringify({\r",
+                  "            \"firstname\" : \"Priya\",\r",
+                  "            \"lastname\" : \"Sharma\",\r",
+                  "            \"totalprice\" : 1120,\r",
+                  "            \"depositpaid\" : true,\r",
+                  "            \"bookingdates\" : {\r",
+                  "                \"checkin\" : \"2018-01-01\",\r",
+                  "                \"checkout\" : \"2019-01-01\"\r",
+                  "    },\r",
+                  "            \"additionalneeds\" : \"Breakfast\"\r",
+                  "        })\r",
+                  "    }\r",
+                  "    \r",
+                  "},function(error, response)\r",
+                  "{\r",
+                  "    if(error)\r",
+                  "    {\r",
+                  "        console.log(error);\r",
+                  "    }else{\r",
+                  "        const resBody=JSON.parse(response.text());\r",
+                  "        const bookingId=resBody.bookingid;\r",
+                  "        console.log(\"Booking ID is :\" +bookingId);\r",
+                  "        pm.variables.set(\"Booking_ID\", bookingId);\r",
+                  "    }\r",
+                  "});"
+                ],
+                "_lastExecutionId": "3e7fe769-d15c-4b3c-9c16-30d34fa017f2"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "https",
+            "path": [
+              "auth"
+            ],
+            "host": [
+              "restful-booker",
+              "herokuapp",
+              "com"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "6bb316cd-e833-449a-a4e7-b8615647ecf6",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "restful-booker.herokuapp.com",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "45",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\"username\":\"admin\",\"password\":\"password123\"}"
+          }
+        },
+        "response": {
+          "id": "6c15036d-2ad5-428b-8846-03f0d30c2ed8",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Server",
+              "value": "Cowboy"
+            },
+            {
+              "key": "Report-To",
+              "value": "{\"group\":\"heroku-nel\",\"max_age\":3600,\"endpoints\":[{\"url\":\"https://nel.heroku.com/reports?ts=1742732213&sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&s=heHvpiJzqqMg6ipf1sLFPmqYTd6HeVgccjXahyl3x38%3D\"}]}"
+            },
+            {
+              "key": "Reporting-Endpoints",
+              "value": "heroku-nel=https://nel.heroku.com/reports?ts=1742732213&sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&s=heHvpiJzqqMg6ipf1sLFPmqYTd6HeVgccjXahyl3x38%3D"
+            },
+            {
+              "key": "Nel",
+              "value": "{\"report_to\":\"heroku-nel\",\"max_age\":3600,\"success_fraction\":0.005,\"failure_fraction\":0.05,\"response_headers\":[\"Via\"]}"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "27"
+            },
+            {
+              "key": "Etag",
+              "value": "W/\"1b-AvtFlnpjSXIES7fQ062a+4arESg\""
+            },
+            {
+              "key": "Date",
+              "value": "Sun, 23 Mar 2025 12:16:53 GMT"
+            },
+            {
+              "key": "Via",
+              "value": "1.1 vegur"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              116,
+              111,
+              107,
+              101,
+              110,
+              34,
+              58,
+              34,
+              99,
+              56,
+              48,
+              52,
+              102,
+              99,
+              56,
+              51,
+              51,
+              99,
+              52,
+              54,
+              100,
+              57,
+              52,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 266,
+          "responseSize": 27
+        },
+        "id": "84d91f05-7332-4ed4-bd2c-3d12e016d6b6"
+      },
+      {
+        "cursor": {
+          "ref": "bde97f7f-08dc-47d2-adb4-3b01105e4047",
+          "length": 7,
+          "cycles": 1,
+          "position": 3,
+          "iteration": 0,
+          "httpRequestId": "318bf0a3-9ef0-46fb-862e-3f99225d3976",
+          "scriptId": "e31c603b-8022-4155-a30d-6ab9d5b1ff39",
+          "execution": "d61e7538-8168-4585-9708-cb859c425735"
+        },
+        "item": {
+          "id": "3ecc03a0-3334-4329-a4f8-b864906bc1e5",
+          "name": "3-GetUserByID",
+          "request": {
+            "url": {
+              "path": [
+                "booking",
+                "{{Booking_ID}}"
+              ],
+              "host": [
+                "{{BaseURL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "GET"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "21cf7771-0d07-4aea-b4c7-4b3efa609087",
+                "type": "text/javascript",
+                "packages": {},
+                "exec": [
+                  "//create booking using creating Boooking API and fetch booking ID\r",
+                  "\r",
+                  "pm.sendRequest({\r",
+                  "    method:'POST',\r",
+                  "    url: pm.environment.get(\"BaseURL\")+'/booking',\r",
+                  "    header:{\r",
+                  "        'Content-Type':'application/json'\r",
+                  "    },\r",
+                  "    body: {\r",
+                  "        mode:'raw',\r",
+                  "        raw:JSON.stringify({\r",
+                  "            \"firstname\" : \"Priya\",\r",
+                  "            \"lastname\" : \"Sharma\",\r",
+                  "            \"totalprice\" : 1120,\r",
+                  "            \"depositpaid\" : true,\r",
+                  "            \"bookingdates\" : {\r",
+                  "                \"checkin\" : \"2018-01-01\",\r",
+                  "                \"checkout\" : \"2019-01-01\"\r",
+                  "    },\r",
+                  "            \"additionalneeds\" : \"Breakfast\"\r",
+                  "        })\r",
+                  "    }\r",
+                  "    \r",
+                  "},function(error, response)\r",
+                  "{\r",
+                  "    if(error)\r",
+                  "    {\r",
+                  "        console.log(error);\r",
+                  "    }else{\r",
+                  "        const resBody=JSON.parse(response.text());\r",
+                  "        const bookingId=resBody.bookingid;\r",
+                  "        console.log(\"Booking ID is :\" +bookingId);\r",
+                  "        pm.variables.set(\"Booking_ID\", bookingId);\r",
+                  "    }\r",
+                  "});"
+                ],
+                "_lastExecutionId": "3e7fe769-d15c-4b3c-9c16-30d34fa017f2"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "https",
+            "path": [
+              "auth"
+            ],
+            "host": [
+              "restful-booker",
+              "herokuapp",
+              "com"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "6bb316cd-e833-449a-a4e7-b8615647ecf6",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "restful-booker.herokuapp.com",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "45",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\"username\":\"admin\",\"password\":\"password123\"}"
+          }
+        },
+        "response": {
+          "id": "6c15036d-2ad5-428b-8846-03f0d30c2ed8",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Server",
+              "value": "Cowboy"
+            },
+            {
+              "key": "Report-To",
+              "value": "{\"group\":\"heroku-nel\",\"max_age\":3600,\"endpoints\":[{\"url\":\"https://nel.heroku.com/reports?ts=1742732213&sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&s=heHvpiJzqqMg6ipf1sLFPmqYTd6HeVgccjXahyl3x38%3D\"}]}"
+            },
+            {
+              "key": "Reporting-Endpoints",
+              "value": "heroku-nel=https://nel.heroku.com/reports?ts=1742732213&sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&s=heHvpiJzqqMg6ipf1sLFPmqYTd6HeVgccjXahyl3x38%3D"
+            },
+            {
+              "key": "Nel",
+              "value": "{\"report_to\":\"heroku-nel\",\"max_age\":3600,\"success_fraction\":0.005,\"failure_fraction\":0.05,\"response_headers\":[\"Via\"]}"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "27"
+            },
+            {
+              "key": "Etag",
+              "value": "W/\"1b-AvtFlnpjSXIES7fQ062a+4arESg\""
+            },
+            {
+              "key": "Date",
+              "value": "Sun, 23 Mar 2025 12:16:53 GMT"
+            },
+            {
+              "key": "Via",
+              "value": "1.1 vegur"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              116,
+              111,
+              107,
+              101,
+              110,
+              34,
+              58,
+              34,
+              99,
+              56,
+              48,
+              52,
+              102,
+              99,
+              56,
+              51,
+              51,
+              99,
+              52,
+              54,
+              100,
+              57,
+              52,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 266,
+          "responseSize": 27
+        },
+        "id": "84d91f05-7332-4ed4-bd2c-3d12e016d6b6"
+      },
+      {
+        "cursor": {
+          "ref": "bde97f7f-08dc-47d2-adb4-3b01105e4047",
+          "length": 7,
+          "cycles": 1,
+          "position": 3,
+          "iteration": 0,
+          "httpRequestId": "318bf0a3-9ef0-46fb-862e-3f99225d3976",
+          "scriptId": "e31c603b-8022-4155-a30d-6ab9d5b1ff39",
+          "execution": "d61e7538-8168-4585-9708-cb859c425735"
+        },
+        "item": {
+          "id": "3ecc03a0-3334-4329-a4f8-b864906bc1e5",
+          "name": "3-GetUserByID",
+          "request": {
+            "url": {
+              "path": [
+                "booking",
+                "{{Booking_ID}}"
+              ],
+              "host": [
+                "{{BaseURL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "GET"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "21cf7771-0d07-4aea-b4c7-4b3efa609087",
+                "type": "text/javascript",
+                "packages": {},
+                "exec": [
+                  "//create booking using creating Boooking API and fetch booking ID\r",
+                  "\r",
+                  "pm.sendRequest({\r",
+                  "    method:'POST',\r",
+                  "    url: pm.environment.get(\"BaseURL\")+'/booking',\r",
+                  "    header:{\r",
+                  "        'Content-Type':'application/json'\r",
+                  "    },\r",
+                  "    body: {\r",
+                  "        mode:'raw',\r",
+                  "        raw:JSON.stringify({\r",
+                  "            \"firstname\" : \"Priya\",\r",
+                  "            \"lastname\" : \"Sharma\",\r",
+                  "            \"totalprice\" : 1120,\r",
+                  "            \"depositpaid\" : true,\r",
+                  "            \"bookingdates\" : {\r",
+                  "                \"checkin\" : \"2018-01-01\",\r",
+                  "                \"checkout\" : \"2019-01-01\"\r",
+                  "    },\r",
+                  "            \"additionalneeds\" : \"Breakfast\"\r",
+                  "        })\r",
+                  "    }\r",
+                  "    \r",
+                  "},function(error, response)\r",
+                  "{\r",
+                  "    if(error)\r",
+                  "    {\r",
+                  "        console.log(error);\r",
+                  "    }else{\r",
+                  "        const resBody=JSON.parse(response.text());\r",
+                  "        const bookingId=resBody.bookingid;\r",
+                  "        console.log(\"Booking ID is :\" +bookingId);\r",
+                  "        pm.variables.set(\"Booking_ID\", bookingId);\r",
+                  "    }\r",
+                  "});"
+                ],
+                "_lastExecutionId": "3e7fe769-d15c-4b3c-9c16-30d34fa017f2"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "https",
+            "path": [
+              "auth"
+            ],
+            "host": [
+              "restful-booker",
+              "herokuapp",
+              "com"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "6bb316cd-e833-449a-a4e7-b8615647ecf6",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "restful-booker.herokuapp.com",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "45",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\"username\":\"admin\",\"password\":\"password123\"}"
+          }
+        },
+        "response": {
+          "id": "6c15036d-2ad5-428b-8846-03f0d30c2ed8",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Server",
+              "value": "Cowboy"
+            },
+            {
+              "key": "Report-To",
+              "value": "{\"group\":\"heroku-nel\",\"max_age\":3600,\"endpoints\":[{\"url\":\"https://nel.heroku.com/reports?ts=1742732213&sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&s=heHvpiJzqqMg6ipf1sLFPmqYTd6HeVgccjXahyl3x38%3D\"}]}"
+            },
+            {
+              "key": "Reporting-Endpoints",
+              "value": "heroku-nel=https://nel.heroku.com/reports?ts=1742732213&sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&s=heHvpiJzqqMg6ipf1sLFPmqYTd6HeVgccjXahyl3x38%3D"
+            },
+            {
+              "key": "Nel",
+              "value": "{\"report_to\":\"heroku-nel\",\"max_age\":3600,\"success_fraction\":0.005,\"failure_fraction\":0.05,\"response_headers\":[\"Via\"]}"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "27"
+            },
+            {
+              "key": "Etag",
+              "value": "W/\"1b-AvtFlnpjSXIES7fQ062a+4arESg\""
+            },
+            {
+              "key": "Date",
+              "value": "Sun, 23 Mar 2025 12:16:53 GMT"
+            },
+            {
+              "key": "Via",
+              "value": "1.1 vegur"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              116,
+              111,
+              107,
+              101,
+              110,
+              34,
+              58,
+              34,
+              99,
+              56,
+              48,
+              52,
+              102,
+              99,
+              56,
+              51,
+              51,
+              99,
+              52,
+              54,
+              100,
+              57,
+              52,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 266,
+          "responseSize": 27
+        },
+        "id": "84d91f05-7332-4ed4-bd2c-3d12e016d6b6"
+      },
+      {
+        "cursor": {
+          "ref": "2681a1ed-21b9-450b-8455-7514a2bca957",
+          "length": 7,
+          "cycles": 1,
+          "position": 4,
+          "iteration": 0,
+          "httpRequestId": "2891b55f-d193-4955-862d-b9520c1b9bf6",
+          "scriptId": "e31c603b-8022-4155-a30d-6ab9d5b1ff39",
+          "execution": "d125d711-eaf8-41fd-aee2-cf3c271ae54f"
+        },
+        "item": {
+          "id": "ed87e6d2-2ed9-4c19-8e75-f4d3b4037110",
+          "name": "5-UpdateUserDetails",
+          "request": {
+            "url": {
+              "path": [
+                "booking",
+                "{{BookingID}}"
+              ],
+              "host": [
+                "{{BaseURL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "token={{New_TokenID}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"firstname\" : \"James\",\r\n    \"lastname\" : \"Cow\",\r\n    \"totalprice\" : 111,\r\n    \"depositpaid\" : true,\r\n    \"bookingdates\" : {\r\n        \"checkin\" : \"2018-01-01\",\r\n        \"checkout\" : \"2019-01-01\"\r\n    },\r\n    \"additionalneeds\" : \"Dinner\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "fd23efcf-116c-46e5-99ec-567a89cd52d5",
+                "type": "text/javascript",
+                "packages": {},
+                "exec": [
+                  "// //creating a token using auth api and fetching it from response\r",
+                  "\r",
+                  "// pm.sendRequest({\r",
+                  "//     method:'POST',\r",
+                  "//     url: pm.environment.get(\"BaseURL\")+'/auth',\r",
+                  "//     header:{\r",
+                  "//         'Content-Type':'application/json'\r",
+                  "//     },\r",
+                  "//     body:{\r",
+                  "//         mode:'raw',\r",
+                  "//         //stringify method is  used to convert JS object to JSON as here we have to pass JS object in JSON form\r",
+                  "//         raw:JSON.stringify({\r",
+                  "//             'username' : pm.environment.get(\"username\"),\r",
+                  "//             'password' : pm.environment.get(\"password\")\r",
+                  "//         })\r",
+                  "//     }\r",
+                  "// },function(error,response)\r",
+                  "// {\r",
+                  "//     if(error)\r",
+                  "//     {\r",
+                  "//         console.log(\"print error message : \"+error);\r",
+                  "//     }else{\r",
+                  "//         const resBody=JSON.parse(response.text());\r",
+                  "//         const tokenID=resBody.token;\r",
+                  "//         console.log(tokenID);\r",
+                  "//         pm.variables.set(\"New_TokenID\", tokenID);\r",
+                  "//     }\r",
+                  "// })"
+                ],
+                "_lastExecutionId": "6ef92bac-96a7-457d-ba8e-118713075c97"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "https",
+            "path": [
+              "auth"
+            ],
+            "host": [
+              "restful-booker",
+              "herokuapp",
+              "com"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "bd75eb87-3fac-451c-b0a2-d86fcbc2a6ac",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "restful-booker.herokuapp.com",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "45",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\"username\":\"admin\",\"password\":\"password123\"}"
+          }
+        },
+        "response": {
+          "id": "914dc889-e2e6-49de-9e5c-6a4ebf24a648",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Server",
+              "value": "Cowboy"
+            },
+            {
+              "key": "Report-To",
+              "value": "{\"group\":\"heroku-nel\",\"max_age\":3600,\"endpoints\":[{\"url\":\"https://nel.heroku.com/reports?ts=1742732214&sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&s=l%2FCSbpzqbc9grLoi73pV7hG2xjcR%2BaAzryEr8nKIdVs%3D\"}]}"
+            },
+            {
+              "key": "Reporting-Endpoints",
+              "value": "heroku-nel=https://nel.heroku.com/reports?ts=1742732214&sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&s=l%2FCSbpzqbc9grLoi73pV7hG2xjcR%2BaAzryEr8nKIdVs%3D"
+            },
+            {
+              "key": "Nel",
+              "value": "{\"report_to\":\"heroku-nel\",\"max_age\":3600,\"success_fraction\":0.005,\"failure_fraction\":0.05,\"response_headers\":[\"Via\"]}"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "27"
+            },
+            {
+              "key": "Etag",
+              "value": "W/\"1b-vnGePjgx2vliXvOeiB0ePrccbwo\""
+            },
+            {
+              "key": "Date",
+              "value": "Sun, 23 Mar 2025 12:16:54 GMT"
+            },
+            {
+              "key": "Via",
+              "value": "1.1 vegur"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              116,
+              111,
+              107,
+              101,
+              110,
+              34,
+              58,
+              34,
+              99,
+              50,
+              98,
+              98,
+              51,
+              99,
+              53,
+              53,
+              100,
+              51,
+              53,
+              51,
+              97,
+              50,
+              97,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 252,
+          "responseSize": 27
+        },
+        "id": "b197f357-07b0-4194-b97b-fc828ad2b6ca"
+      },
+      {
+        "cursor": {
+          "ref": "2681a1ed-21b9-450b-8455-7514a2bca957",
+          "length": 7,
+          "cycles": 1,
+          "position": 4,
+          "iteration": 0,
+          "httpRequestId": "2891b55f-d193-4955-862d-b9520c1b9bf6",
+          "scriptId": "e31c603b-8022-4155-a30d-6ab9d5b1ff39",
+          "execution": "d125d711-eaf8-41fd-aee2-cf3c271ae54f"
+        },
+        "item": {
+          "id": "ed87e6d2-2ed9-4c19-8e75-f4d3b4037110",
+          "name": "5-UpdateUserDetails",
+          "request": {
+            "url": {
+              "path": [
+                "booking",
+                "{{BookingID}}"
+              ],
+              "host": [
+                "{{BaseURL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "token={{New_TokenID}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"firstname\" : \"James\",\r\n    \"lastname\" : \"Cow\",\r\n    \"totalprice\" : 111,\r\n    \"depositpaid\" : true,\r\n    \"bookingdates\" : {\r\n        \"checkin\" : \"2018-01-01\",\r\n        \"checkout\" : \"2019-01-01\"\r\n    },\r\n    \"additionalneeds\" : \"Dinner\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "fd23efcf-116c-46e5-99ec-567a89cd52d5",
+                "type": "text/javascript",
+                "packages": {},
+                "exec": [
+                  "// //creating a token using auth api and fetching it from response\r",
+                  "\r",
+                  "// pm.sendRequest({\r",
+                  "//     method:'POST',\r",
+                  "//     url: pm.environment.get(\"BaseURL\")+'/auth',\r",
+                  "//     header:{\r",
+                  "//         'Content-Type':'application/json'\r",
+                  "//     },\r",
+                  "//     body:{\r",
+                  "//         mode:'raw',\r",
+                  "//         //stringify method is  used to convert JS object to JSON as here we have to pass JS object in JSON form\r",
+                  "//         raw:JSON.stringify({\r",
+                  "//             'username' : pm.environment.get(\"username\"),\r",
+                  "//             'password' : pm.environment.get(\"password\")\r",
+                  "//         })\r",
+                  "//     }\r",
+                  "// },function(error,response)\r",
+                  "// {\r",
+                  "//     if(error)\r",
+                  "//     {\r",
+                  "//         console.log(\"print error message : \"+error);\r",
+                  "//     }else{\r",
+                  "//         const resBody=JSON.parse(response.text());\r",
+                  "//         const tokenID=resBody.token;\r",
+                  "//         console.log(tokenID);\r",
+                  "//         pm.variables.set(\"New_TokenID\", tokenID);\r",
+                  "//     }\r",
+                  "// })"
+                ],
+                "_lastExecutionId": "6ef92bac-96a7-457d-ba8e-118713075c97"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "https",
+            "path": [
+              "auth"
+            ],
+            "host": [
+              "restful-booker",
+              "herokuapp",
+              "com"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "bd75eb87-3fac-451c-b0a2-d86fcbc2a6ac",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "restful-booker.herokuapp.com",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "45",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\"username\":\"admin\",\"password\":\"password123\"}"
+          }
+        },
+        "response": {
+          "id": "914dc889-e2e6-49de-9e5c-6a4ebf24a648",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Server",
+              "value": "Cowboy"
+            },
+            {
+              "key": "Report-To",
+              "value": "{\"group\":\"heroku-nel\",\"max_age\":3600,\"endpoints\":[{\"url\":\"https://nel.heroku.com/reports?ts=1742732214&sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&s=l%2FCSbpzqbc9grLoi73pV7hG2xjcR%2BaAzryEr8nKIdVs%3D\"}]}"
+            },
+            {
+              "key": "Reporting-Endpoints",
+              "value": "heroku-nel=https://nel.heroku.com/reports?ts=1742732214&sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&s=l%2FCSbpzqbc9grLoi73pV7hG2xjcR%2BaAzryEr8nKIdVs%3D"
+            },
+            {
+              "key": "Nel",
+              "value": "{\"report_to\":\"heroku-nel\",\"max_age\":3600,\"success_fraction\":0.005,\"failure_fraction\":0.05,\"response_headers\":[\"Via\"]}"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "27"
+            },
+            {
+              "key": "Etag",
+              "value": "W/\"1b-vnGePjgx2vliXvOeiB0ePrccbwo\""
+            },
+            {
+              "key": "Date",
+              "value": "Sun, 23 Mar 2025 12:16:54 GMT"
+            },
+            {
+              "key": "Via",
+              "value": "1.1 vegur"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              116,
+              111,
+              107,
+              101,
+              110,
+              34,
+              58,
+              34,
+              99,
+              50,
+              98,
+              98,
+              51,
+              99,
+              53,
+              53,
+              100,
+              51,
+              53,
+              51,
+              97,
+              50,
+              97,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 252,
+          "responseSize": 27
+        },
+        "id": "b197f357-07b0-4194-b97b-fc828ad2b6ca"
+      },
+      {
+        "cursor": {
+          "ref": "11d215be-bd4c-4811-9c95-691aa6e27b6e",
+          "length": 7,
+          "cycles": 1,
+          "position": 5,
+          "iteration": 0,
+          "httpRequestId": "3983b90b-e655-4437-bcb4-cfdc9a30f718",
+          "scriptId": "e31c603b-8022-4155-a30d-6ab9d5b1ff39",
+          "execution": "8fb14787-d221-4578-be24-621e6616c391"
+        },
+        "item": {
+          "id": "e6015c79-0449-43d9-8e02-791570cdd308",
+          "name": "6-UpdatePartialData",
+          "request": {
+            "url": {
+              "path": [
+                "booking",
+                "{{BookingID}}"
+              ],
+              "host": [
+                "{{BaseURL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "token={{Token_ID}}"
+              }
+            ],
+            "method": "PATCH",
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"firstname\" : \"James\",\r\n    \"lastname\" : \"Brown\",\r\n    \"totalprice\" : 5000\r\n\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "1f6cf5e8-fcca-44d1-9791-120f1072a004",
+                "type": "text/javascript",
+                "packages": {},
+                "exec": [
+                  "// //creating a token using auth api and fetching it from response\r",
+                  "\r",
+                  "// pm.sendRequest({\r",
+                  "//     method:'POST',\r",
+                  "//     url: pm.environment.get(\"BaseURL\")+'/auth',\r",
+                  "//     header:{\r",
+                  "//         'Content-Type':'application/json'\r",
+                  "//     },\r",
+                  "//     body:{\r",
+                  "//         mode:'raw',\r",
+                  "//         //stringify method is  used to convert JS object to JSON as here we have to pass JS object in JSON form\r",
+                  "//         raw:JSON.stringify({\r",
+                  "//             'username' : pm.environment.get(\"username\"),\r",
+                  "//             'password' : pm.environment.get(\"password\")\r",
+                  "//         })\r",
+                  "//     }\r",
+                  "// },function(error,response)\r",
+                  "// {\r",
+                  "//     if(error)\r",
+                  "//     {\r",
+                  "//         console.log(\"print error message : \"+error);\r",
+                  "//     }else{\r",
+                  "//         const resBody=JSON.parse(response.text());\r",
+                  "//         const tokenID=resBody.token;\r",
+                  "//         console.log(tokenID);\r",
+                  "//         pm.variables.set(\"New_TokenID\", tokenID);\r",
+                  "//     }\r",
+                  "// })"
+                ],
+                "_lastExecutionId": "20f2d2a3-3753-443d-b40f-e5767472a64f"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "https",
+            "path": [
+              "auth"
+            ],
+            "host": [
+              "restful-booker",
+              "herokuapp",
+              "com"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "1715e12a-8a8d-456a-8945-971e538bb3a9",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "restful-booker.herokuapp.com",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "45",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\"username\":\"admin\",\"password\":\"password123\"}"
+          }
+        },
+        "response": {
+          "id": "527680e9-a708-4f95-a727-38f27bb05948",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Server",
+              "value": "Cowboy"
+            },
+            {
+              "key": "Report-To",
+              "value": "{\"group\":\"heroku-nel\",\"max_age\":3600,\"endpoints\":[{\"url\":\"https://nel.heroku.com/reports?ts=1742732215&sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&s=9ye8SNFqgavQEK0kUkP%2F840U655WvO4LWSE8yrpK5ds%3D\"}]}"
+            },
+            {
+              "key": "Reporting-Endpoints",
+              "value": "heroku-nel=https://nel.heroku.com/reports?ts=1742732215&sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&s=9ye8SNFqgavQEK0kUkP%2F840U655WvO4LWSE8yrpK5ds%3D"
+            },
+            {
+              "key": "Nel",
+              "value": "{\"report_to\":\"heroku-nel\",\"max_age\":3600,\"success_fraction\":0.005,\"failure_fraction\":0.05,\"response_headers\":[\"Via\"]}"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "27"
+            },
+            {
+              "key": "Etag",
+              "value": "W/\"1b-B16FsgvPn1ljyu7FSMllZTRHAKM\""
+            },
+            {
+              "key": "Date",
+              "value": "Sun, 23 Mar 2025 12:16:55 GMT"
+            },
+            {
+              "key": "Via",
+              "value": "1.1 vegur"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              116,
+              111,
+              107,
+              101,
+              110,
+              34,
+              58,
+              34,
+              49,
+              101,
+              57,
+              97,
+              51,
+              98,
+              55,
+              99,
+              54,
+              98,
+              102,
+              101,
+              97,
+              55,
+              52,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 266,
+          "responseSize": 27
+        },
+        "id": "18d1e247-f009-4205-8168-51b0d6653dea"
+      },
+      {
+        "cursor": {
+          "ref": "11d215be-bd4c-4811-9c95-691aa6e27b6e",
+          "length": 7,
+          "cycles": 1,
+          "position": 5,
+          "iteration": 0,
+          "httpRequestId": "3983b90b-e655-4437-bcb4-cfdc9a30f718",
+          "scriptId": "e31c603b-8022-4155-a30d-6ab9d5b1ff39",
+          "execution": "8fb14787-d221-4578-be24-621e6616c391"
+        },
+        "item": {
+          "id": "e6015c79-0449-43d9-8e02-791570cdd308",
+          "name": "6-UpdatePartialData",
+          "request": {
+            "url": {
+              "path": [
+                "booking",
+                "{{BookingID}}"
+              ],
+              "host": [
+                "{{BaseURL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "token={{Token_ID}}"
+              }
+            ],
+            "method": "PATCH",
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"firstname\" : \"James\",\r\n    \"lastname\" : \"Brown\",\r\n    \"totalprice\" : 5000\r\n\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "1f6cf5e8-fcca-44d1-9791-120f1072a004",
+                "type": "text/javascript",
+                "packages": {},
+                "exec": [
+                  "// //creating a token using auth api and fetching it from response\r",
+                  "\r",
+                  "// pm.sendRequest({\r",
+                  "//     method:'POST',\r",
+                  "//     url: pm.environment.get(\"BaseURL\")+'/auth',\r",
+                  "//     header:{\r",
+                  "//         'Content-Type':'application/json'\r",
+                  "//     },\r",
+                  "//     body:{\r",
+                  "//         mode:'raw',\r",
+                  "//         //stringify method is  used to convert JS object to JSON as here we have to pass JS object in JSON form\r",
+                  "//         raw:JSON.stringify({\r",
+                  "//             'username' : pm.environment.get(\"username\"),\r",
+                  "//             'password' : pm.environment.get(\"password\")\r",
+                  "//         })\r",
+                  "//     }\r",
+                  "// },function(error,response)\r",
+                  "// {\r",
+                  "//     if(error)\r",
+                  "//     {\r",
+                  "//         console.log(\"print error message : \"+error);\r",
+                  "//     }else{\r",
+                  "//         const resBody=JSON.parse(response.text());\r",
+                  "//         const tokenID=resBody.token;\r",
+                  "//         console.log(tokenID);\r",
+                  "//         pm.variables.set(\"New_TokenID\", tokenID);\r",
+                  "//     }\r",
+                  "// })"
+                ],
+                "_lastExecutionId": "20f2d2a3-3753-443d-b40f-e5767472a64f"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "https",
+            "path": [
+              "auth"
+            ],
+            "host": [
+              "restful-booker",
+              "herokuapp",
+              "com"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "1715e12a-8a8d-456a-8945-971e538bb3a9",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "restful-booker.herokuapp.com",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "45",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\"username\":\"admin\",\"password\":\"password123\"}"
+          }
+        },
+        "response": {
+          "id": "527680e9-a708-4f95-a727-38f27bb05948",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Server",
+              "value": "Cowboy"
+            },
+            {
+              "key": "Report-To",
+              "value": "{\"group\":\"heroku-nel\",\"max_age\":3600,\"endpoints\":[{\"url\":\"https://nel.heroku.com/reports?ts=1742732215&sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&s=9ye8SNFqgavQEK0kUkP%2F840U655WvO4LWSE8yrpK5ds%3D\"}]}"
+            },
+            {
+              "key": "Reporting-Endpoints",
+              "value": "heroku-nel=https://nel.heroku.com/reports?ts=1742732215&sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&s=9ye8SNFqgavQEK0kUkP%2F840U655WvO4LWSE8yrpK5ds%3D"
+            },
+            {
+              "key": "Nel",
+              "value": "{\"report_to\":\"heroku-nel\",\"max_age\":3600,\"success_fraction\":0.005,\"failure_fraction\":0.05,\"response_headers\":[\"Via\"]}"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "27"
+            },
+            {
+              "key": "Etag",
+              "value": "W/\"1b-B16FsgvPn1ljyu7FSMllZTRHAKM\""
+            },
+            {
+              "key": "Date",
+              "value": "Sun, 23 Mar 2025 12:16:55 GMT"
+            },
+            {
+              "key": "Via",
+              "value": "1.1 vegur"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              116,
+              111,
+              107,
+              101,
+              110,
+              34,
+              58,
+              34,
+              49,
+              101,
+              57,
+              97,
+              51,
+              98,
+              55,
+              99,
+              54,
+              98,
+              102,
+              101,
+              97,
+              55,
+              52,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 266,
+          "responseSize": 27
+        },
+        "id": "18d1e247-f009-4205-8168-51b0d6653dea"
+      },
+      {
+        "cursor": {
+          "ref": "ea3d4de0-0e40-4d38-af20-c8b24b21db0e",
+          "length": 7,
+          "cycles": 1,
+          "position": 6,
+          "iteration": 0,
+          "httpRequestId": "6104d289-2cb4-4b78-ab2a-51ecccf6a7ee",
+          "scriptId": "e31c603b-8022-4155-a30d-6ab9d5b1ff39",
+          "execution": "ca5ab834-1fc1-46c4-8b71-7af274ef54a8"
+        },
+        "item": {
+          "id": "13627e12-2a5a-45e2-a6ee-d286be4749f1",
+          "name": "7-DeleteUserById",
+          "request": {
+            "url": {
+              "path": [
+                "booking",
+                "{{BookingID}}"
+              ],
+              "host": [
+                "{{BaseURL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Cookie",
+                "value": "token={{Token_ID}}"
+              }
+            ],
+            "method": "DELETE"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "b80fc40d-2783-4ca2-9c7a-d3c5707fa036",
+                "type": "text/javascript",
+                "packages": {},
+                "exec": [
+                  "// //creating a token using auth api and fetching it from response\r",
+                  "\r",
+                  "// pm.sendRequest({\r",
+                  "//     method:'POST',\r",
+                  "//     url: pm.environment.get(\"BaseURL\")+'/auth',\r",
+                  "//     header:{\r",
+                  "//         'Content-Type':'application/json'\r",
+                  "//     },\r",
+                  "//     body:{\r",
+                  "//         mode:'raw',\r",
+                  "//         //stringify method is  used to convert JS object to JSON as here we have to pass JS object in JSON form\r",
+                  "//         raw:JSON.stringify({\r",
+                  "//             'username' : pm.environment.get(\"username\"),\r",
+                  "//             'password' : pm.environment.get(\"password\")\r",
+                  "//         })\r",
+                  "//     }\r",
+                  "// },function(error,response)\r",
+                  "// {\r",
+                  "//     if(error)\r",
+                  "//     {\r",
+                  "//         console.log(\"print error message : \"+error);\r",
+                  "//     }else{\r",
+                  "//         const resBody=JSON.parse(response.text());\r",
+                  "//         const tokenID=resBody.token;\r",
+                  "//         console.log(tokenID);\r",
+                  "//         pm.variables.set(\"New_TokenID\", tokenID);\r",
+                  "//     }\r",
+                  "// })"
+                ],
+                "_lastExecutionId": "1e4b415d-f3c9-401b-be5b-7dd53e4bdb09"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "https",
+            "path": [
+              "auth"
+            ],
+            "host": [
+              "restful-booker",
+              "herokuapp",
+              "com"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "1afcf964-81b9-469f-b6c7-99b77a9ba0a8",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "restful-booker.herokuapp.com",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "45",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\"username\":\"admin\",\"password\":\"password123\"}"
+          }
+        },
+        "response": {
+          "id": "a12e12d3-86db-4f33-afbb-614b158dfec4",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Server",
+              "value": "Cowboy"
+            },
+            {
+              "key": "Report-To",
+              "value": "{\"group\":\"heroku-nel\",\"max_age\":3600,\"endpoints\":[{\"url\":\"https://nel.heroku.com/reports?ts=1742732215&sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&s=9ye8SNFqgavQEK0kUkP%2F840U655WvO4LWSE8yrpK5ds%3D\"}]}"
+            },
+            {
+              "key": "Reporting-Endpoints",
+              "value": "heroku-nel=https://nel.heroku.com/reports?ts=1742732215&sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&s=9ye8SNFqgavQEK0kUkP%2F840U655WvO4LWSE8yrpK5ds%3D"
+            },
+            {
+              "key": "Nel",
+              "value": "{\"report_to\":\"heroku-nel\",\"max_age\":3600,\"success_fraction\":0.005,\"failure_fraction\":0.05,\"response_headers\":[\"Via\"]}"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "27"
+            },
+            {
+              "key": "Etag",
+              "value": "W/\"1b-BogOclLJxplhrPuH9sp3qd5kqfo\""
+            },
+            {
+              "key": "Date",
+              "value": "Sun, 23 Mar 2025 12:16:55 GMT"
+            },
+            {
+              "key": "Via",
+              "value": "1.1 vegur"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              116,
+              111,
+              107,
+              101,
+              110,
+              34,
+              58,
+              34,
+              52,
+              57,
+              97,
+              101,
+              53,
+              102,
+              51,
+              51,
+              100,
+              98,
+              97,
+              102,
+              50,
+              100,
+              101,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 252,
+          "responseSize": 27
+        },
+        "id": "e42c75a7-0d93-498f-9c4e-c82ba98449ed"
+      },
+      {
+        "cursor": {
+          "ref": "ea3d4de0-0e40-4d38-af20-c8b24b21db0e",
+          "length": 7,
+          "cycles": 1,
+          "position": 6,
+          "iteration": 0,
+          "httpRequestId": "6104d289-2cb4-4b78-ab2a-51ecccf6a7ee",
+          "scriptId": "e31c603b-8022-4155-a30d-6ab9d5b1ff39",
+          "execution": "ca5ab834-1fc1-46c4-8b71-7af274ef54a8"
+        },
+        "item": {
+          "id": "13627e12-2a5a-45e2-a6ee-d286be4749f1",
+          "name": "7-DeleteUserById",
+          "request": {
+            "url": {
+              "path": [
+                "booking",
+                "{{BookingID}}"
+              ],
+              "host": [
+                "{{BaseURL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Cookie",
+                "value": "token={{Token_ID}}"
+              }
+            ],
+            "method": "DELETE"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "b80fc40d-2783-4ca2-9c7a-d3c5707fa036",
+                "type": "text/javascript",
+                "packages": {},
+                "exec": [
+                  "// //creating a token using auth api and fetching it from response\r",
+                  "\r",
+                  "// pm.sendRequest({\r",
+                  "//     method:'POST',\r",
+                  "//     url: pm.environment.get(\"BaseURL\")+'/auth',\r",
+                  "//     header:{\r",
+                  "//         'Content-Type':'application/json'\r",
+                  "//     },\r",
+                  "//     body:{\r",
+                  "//         mode:'raw',\r",
+                  "//         //stringify method is  used to convert JS object to JSON as here we have to pass JS object in JSON form\r",
+                  "//         raw:JSON.stringify({\r",
+                  "//             'username' : pm.environment.get(\"username\"),\r",
+                  "//             'password' : pm.environment.get(\"password\")\r",
+                  "//         })\r",
+                  "//     }\r",
+                  "// },function(error,response)\r",
+                  "// {\r",
+                  "//     if(error)\r",
+                  "//     {\r",
+                  "//         console.log(\"print error message : \"+error);\r",
+                  "//     }else{\r",
+                  "//         const resBody=JSON.parse(response.text());\r",
+                  "//         const tokenID=resBody.token;\r",
+                  "//         console.log(tokenID);\r",
+                  "//         pm.variables.set(\"New_TokenID\", tokenID);\r",
+                  "//     }\r",
+                  "// })"
+                ],
+                "_lastExecutionId": "1e4b415d-f3c9-401b-be5b-7dd53e4bdb09"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "https",
+            "path": [
+              "auth"
+            ],
+            "host": [
+              "restful-booker",
+              "herokuapp",
+              "com"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "1afcf964-81b9-469f-b6c7-99b77a9ba0a8",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "restful-booker.herokuapp.com",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "45",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\"username\":\"admin\",\"password\":\"password123\"}"
+          }
+        },
+        "response": {
+          "id": "a12e12d3-86db-4f33-afbb-614b158dfec4",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Server",
+              "value": "Cowboy"
+            },
+            {
+              "key": "Report-To",
+              "value": "{\"group\":\"heroku-nel\",\"max_age\":3600,\"endpoints\":[{\"url\":\"https://nel.heroku.com/reports?ts=1742732215&sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&s=9ye8SNFqgavQEK0kUkP%2F840U655WvO4LWSE8yrpK5ds%3D\"}]}"
+            },
+            {
+              "key": "Reporting-Endpoints",
+              "value": "heroku-nel=https://nel.heroku.com/reports?ts=1742732215&sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&s=9ye8SNFqgavQEK0kUkP%2F840U655WvO4LWSE8yrpK5ds%3D"
+            },
+            {
+              "key": "Nel",
+              "value": "{\"report_to\":\"heroku-nel\",\"max_age\":3600,\"success_fraction\":0.005,\"failure_fraction\":0.05,\"response_headers\":[\"Via\"]}"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "27"
+            },
+            {
+              "key": "Etag",
+              "value": "W/\"1b-BogOclLJxplhrPuH9sp3qd5kqfo\""
+            },
+            {
+              "key": "Date",
+              "value": "Sun, 23 Mar 2025 12:16:55 GMT"
+            },
+            {
+              "key": "Via",
+              "value": "1.1 vegur"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              116,
+              111,
+              107,
+              101,
+              110,
+              34,
+              58,
+              34,
+              52,
+              57,
+              97,
+              101,
+              53,
+              102,
+              51,
+              51,
+              100,
+              98,
+              97,
+              102,
+              50,
+              100,
+              101,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 252,
+          "responseSize": 27
+        },
+        "id": "e42c75a7-0d93-498f-9c4e-c82ba98449ed"
+      }
+    ],
+    "transfers": {
+      "responseTotal": 36546
+    },
+    "failures": [],
+    "error": null
+  }
+}

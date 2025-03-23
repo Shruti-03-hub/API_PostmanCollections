@@ -1,0 +1,3211 @@
+{
+  "collection": {
+    "_": {
+      "postman_id": "baa91685-82e1-4c3c-aef7-90f4637f3fb7",
+      "exporter_id": "41844441"
+    },
+    "item": [
+      {
+        "id": "64d80e15-3ced-46d1-9e58-c19ca8f31908",
+        "name": "1-createMutlipleUsers",
+        "request": {
+          "url": {
+            "path": [
+              "public",
+              "v2",
+              "users"
+            ],
+            "host": [
+              "{{BaseURL}}"
+            ],
+            "query": [
+              {
+                "disabled": true,
+                "key": "status",
+                "value": "active"
+              }
+            ],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Authorization",
+              "value": "{{TokenID}}"
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "//fetching name gender and status from test data\r\n\r\n{\r\n    \"name\": \"{{name}}\",\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"gender\": \"{{gender}}\",\r\n    \"status\": \"{{status}}\"\r\n \r\n}",
+            "options": {
+              "raw": {
+                "language": "json"
+              }
+            }
+          }
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "dcc525f1-8366-4eed-ae18-f4b0bb2214fc",
+              "type": "text/javascript",
+              "packages": {},
+              "exec": [
+                "pm.test(\"Status code is 201\", function () {\r",
+                "    pm.response.to.have.status(201);\r",
+                "});\r",
+                "\r",
+                "//validating expected data with actual data\r",
+                "pm.test(\"check Json response data\", function (){\r",
+                "    var jsondata=pm.response.json();\r",
+                "    pm.expect(jsondata.name).to.eql(pm.iterationData.get(\"name\"));\r",
+                "    pm.expect(jsondata.gender).to.eql(pm.iterationData.get(\"gender\"));\r",
+                "    pm.expect(jsondata.status).to.eql(pm.iterationData.get(\"status\"));\r",
+                "\r",
+                "    //fetching reuest data email\r",
+                "    const rawJsonbody=pm.request.body.raw;\r",
+                "\r",
+                "    //convertng JSOn to Javascript object\r",
+                "    const requestBody=JSON.parse(rawJsonbody);\r",
+                "    const expectedEmail=requestBody.email;\r",
+                "    console.log(\"Expected email is : \" +expectedEmail);\r",
+                "    pm.expect(jsondata.email).to.eql(expectedEmail);\r",
+                "});\r",
+                "\r",
+                "const res=pm.response.json();\r",
+                "const userID=res.id;\r",
+                "pm.variables.set(\"user_ID\",userID);"
+              ],
+              "_lastExecutionId": "45602b46-d804-4f6a-9055-c523a25d8d62"
+            }
+          }
+        ]
+      },
+      {
+        "id": "3c49a82a-b94f-416e-9151-4084de2ca40d",
+        "name": "updateUserStatus",
+        "request": {
+          "url": {
+            "protocol": "https",
+            "path": [
+              "public",
+              "v2",
+              "users",
+              "{{user_ID}}"
+            ],
+            "host": [
+              "gorest",
+              "co",
+              "in"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Authorization",
+              "value": "{{TokenID}}"
+            }
+          ],
+          "method": "PUT",
+          "body": {
+            "mode": "raw",
+            "raw": "{\r\n    \"status\" : \"{{newstatus}}\"\r\n}",
+            "options": {
+              "raw": {
+                "language": "json"
+              }
+            }
+          }
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "30298706-fe92-4f81-9e03-1e026e267b39",
+              "type": "text/javascript",
+              "packages": {},
+              "exec": [
+                "pm.test(\"Status code is 200\", function () {\r",
+                "    pm.response.to.have.status(200);\r",
+                "});\r",
+                "\r",
+                "pm.test(\"Is UserStatus update\", function(){\r",
+                "const jsondata=pm.response.json();\r",
+                "pm.expect(jsondata.status).to.eql(pm.iterationData.get(\"newstatus\"));\r",
+                "})\r",
+                ""
+              ],
+              "_lastExecutionId": "bfca0a80-a7dd-4752-9932-362c99cb6d10"
+            }
+          }
+        ]
+      }
+    ],
+    "event": [],
+    "variable": [],
+    "info": {
+      "_postman_id": "baa91685-82e1-4c3c-aef7-90f4637f3fb7",
+      "name": "DataDriverAPI_Testing",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    }
+  },
+  "environment": {
+    "_": {
+      "postman_variable_scope": "environment",
+      "postman_exported_at": "2025-03-19T09:59:01.534Z",
+      "postman_exported_using": "Postman/11.37.1"
+    },
+    "id": "35b33b26-2ccd-4543-9d47-2bb413a31c4e",
+    "name": "Gorest_Env",
+    "values": [
+      {
+        "type": "any",
+        "value": "https://gorest.co.in",
+        "key": "BaseURL"
+      },
+      {
+        "type": "any",
+        "value": "Bearer a8290af37229cda22cbe012d9214d84398b21cb3a022824dc9304e0ee10403ae",
+        "key": "TokenID"
+      }
+    ]
+  },
+  "globals": {
+    "id": "8197bcaa-6748-4eb1-a18f-661eedecdbb7",
+    "values": []
+  },
+  "run": {
+    "stats": {
+      "iterations": {
+        "total": 3,
+        "pending": 0,
+        "failed": 0
+      },
+      "items": {
+        "total": 6,
+        "pending": 0,
+        "failed": 0
+      },
+      "scripts": {
+        "total": 6,
+        "pending": 0,
+        "failed": 0
+      },
+      "prerequests": {
+        "total": 6,
+        "pending": 0,
+        "failed": 0
+      },
+      "requests": {
+        "total": 6,
+        "pending": 0,
+        "failed": 0
+      },
+      "tests": {
+        "total": 6,
+        "pending": 0,
+        "failed": 0
+      },
+      "assertions": {
+        "total": 12,
+        "pending": 0,
+        "failed": 3
+      },
+      "testScripts": {
+        "total": 6,
+        "pending": 0,
+        "failed": 0
+      },
+      "prerequestScripts": {
+        "total": 0,
+        "pending": 0,
+        "failed": 0
+      }
+    },
+    "timings": {
+      "responseAverage": 818.8333333333334,
+      "responseMin": 132,
+      "responseMax": 4171,
+      "responseSd": 1499.2257353566056,
+      "dnsAverage": 0,
+      "dnsMin": 0,
+      "dnsMax": 0,
+      "dnsSd": 0,
+      "firstByteAverage": 0,
+      "firstByteMin": 0,
+      "firstByteMax": 0,
+      "firstByteSd": 0,
+      "started": 1742737194416,
+      "completed": 1742737200057
+    },
+    "executions": [
+      {
+        "cursor": {
+          "position": 0,
+          "iteration": 0,
+          "length": 2,
+          "cycles": 3,
+          "empty": false,
+          "eof": false,
+          "bof": true,
+          "cr": false,
+          "ref": "8a6bfec2-d4c7-495b-91c6-e4b1e0200355",
+          "httpRequestId": "7c2d050b-eb39-438c-bca5-8d99f7281cd1"
+        },
+        "item": {
+          "id": "64d80e15-3ced-46d1-9e58-c19ca8f31908",
+          "name": "1-createMutlipleUsers",
+          "request": {
+            "url": {
+              "path": [
+                "public",
+                "v2",
+                "users"
+              ],
+              "host": [
+                "{{BaseURL}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "status",
+                  "value": "active"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{TokenID}}"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "//fetching name gender and status from test data\r\n\r\n{\r\n    \"name\": \"{{name}}\",\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"gender\": \"{{gender}}\",\r\n    \"status\": \"{{status}}\"\r\n \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "dcc525f1-8366-4eed-ae18-f4b0bb2214fc",
+                "type": "text/javascript",
+                "packages": {},
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {\r",
+                  "    pm.response.to.have.status(201);\r",
+                  "});\r",
+                  "\r",
+                  "//validating expected data with actual data\r",
+                  "pm.test(\"check Json response data\", function (){\r",
+                  "    var jsondata=pm.response.json();\r",
+                  "    pm.expect(jsondata.name).to.eql(pm.iterationData.get(\"name\"));\r",
+                  "    pm.expect(jsondata.gender).to.eql(pm.iterationData.get(\"gender\"));\r",
+                  "    pm.expect(jsondata.status).to.eql(pm.iterationData.get(\"status\"));\r",
+                  "\r",
+                  "    //fetching reuest data email\r",
+                  "    const rawJsonbody=pm.request.body.raw;\r",
+                  "\r",
+                  "    //convertng JSOn to Javascript object\r",
+                  "    const requestBody=JSON.parse(rawJsonbody);\r",
+                  "    const expectedEmail=requestBody.email;\r",
+                  "    console.log(\"Expected email is : \" +expectedEmail);\r",
+                  "    pm.expect(jsondata.email).to.eql(expectedEmail);\r",
+                  "});\r",
+                  "\r",
+                  "const res=pm.response.json();\r",
+                  "const userID=res.id;\r",
+                  "pm.variables.set(\"user_ID\",userID);"
+                ],
+                "_lastExecutionId": "45602b46-d804-4f6a-9055-c523a25d8d62"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "https",
+            "path": [
+              "public",
+              "v2",
+              "users"
+            ],
+            "host": [
+              "gorest",
+              "co",
+              "in"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Authorization",
+              "value": "Bearer a8290af37229cda22cbe012d9214d84398b21cb3a022824dc9304e0ee10403ae"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json",
+              "system": true
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "7975e253-b0f4-4d28-b679-5436f03b2169",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "gorest.co.in",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "125",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "\n\r\n{\r\n    \"name\": \"shruti\",\r\n    \"email\": \"Scarlett_Huel61@gmail.com\",\r\n    \"gender\": \"female\",\r\n    \"status\": \"active\"\r\n \r\n}",
+            "options": {
+              "raw": {
+                "language": "json"
+              }
+            }
+          }
+        },
+        "response": {
+          "id": "d9ff6fb0-37b2-4f6c-9638-b46fa82bf7c0",
+          "status": "Created",
+          "code": 201,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Sun, 23 Mar 2025 13:39:57 GMT"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "102"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "max-age=0, private, must-revalidate"
+            },
+            {
+              "key": "etag",
+              "value": "W/\"e8271153be1f092433164e1b7bde0536\""
+            },
+            {
+              "key": "feature-policy",
+              "value": "camera 'none'; gyroscope 'none'; microphone 'none'; usb 'none'; fullscreen 'self'"
+            },
+            {
+              "key": "location",
+              "value": "https://gorest.co.in/public/v2/users/7790427"
+            },
+            {
+              "key": "referrer-policy",
+              "value": "strict-origin-when-cross-origin"
+            },
+            {
+              "key": "vary",
+              "value": "Origin"
+            },
+            {
+              "key": "x-content-type-options",
+              "value": "nosniff"
+            },
+            {
+              "key": "x-download-options",
+              "value": "noopen"
+            },
+            {
+              "key": "x-frame-options",
+              "value": "SAMEORIGIN"
+            },
+            {
+              "key": "x-permitted-cross-domain-policies",
+              "value": "none"
+            },
+            {
+              "key": "x-ratelimit-limit",
+              "value": "90"
+            },
+            {
+              "key": "x-ratelimit-remaining",
+              "value": "84"
+            },
+            {
+              "key": "x-ratelimit-reset",
+              "value": "1"
+            },
+            {
+              "key": "x-request-id",
+              "value": "74015edc-bf28-497f-a28f-cee72c190ece"
+            },
+            {
+              "key": "x-runtime",
+              "value": "0.057131"
+            },
+            {
+              "key": "x-xss-protection",
+              "value": "0"
+            },
+            {
+              "key": "cf-cache-status",
+              "value": "DYNAMIC"
+            },
+            {
+              "key": "Report-To",
+              "value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v4?s=ZP3frR8i841SQO5Z3kbZt1B9Qh%2B44tWb%2FTIbFFAVgvB438GbISsSLq0ZRziPZmIQwt%2BNcaCJ1LgHHn0yOegWhUCjrTHsIaigm0xq7cBxJ3YpONMbz%2Bx%2F1%2Buyu0SqBHo%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+            },
+            {
+              "key": "NEL",
+              "value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+            },
+            {
+              "key": "Server",
+              "value": "cloudflare"
+            },
+            {
+              "key": "CF-RAY",
+              "value": "924e567cb96b493e-BOM"
+            },
+            {
+              "key": "alt-svc",
+              "value": "h3=\":443\"; ma=86400"
+            },
+            {
+              "key": "server-timing",
+              "value": "cfL4;desc=\"?proto=TCP&rtt=36925&min_rtt=36859&rtt_var=13954&sent=4&recv=5&lost=0&retrans=0&sent_bytes=2828&recv_bytes=978&delivery_rate=77669&cwnd=251&unsent_bytes=0&cid=9386600578dbdfbb&ts=330&x=0\""
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              105,
+              100,
+              34,
+              58,
+              55,
+              55,
+              57,
+              48,
+              52,
+              50,
+              55,
+              44,
+              34,
+              110,
+              97,
+              109,
+              101,
+              34,
+              58,
+              34,
+              115,
+              104,
+              114,
+              117,
+              116,
+              105,
+              34,
+              44,
+              34,
+              101,
+              109,
+              97,
+              105,
+              108,
+              34,
+              58,
+              34,
+              83,
+              99,
+              97,
+              114,
+              108,
+              101,
+              116,
+              116,
+              95,
+              72,
+              117,
+              101,
+              108,
+              54,
+              49,
+              64,
+              103,
+              109,
+              97,
+              105,
+              108,
+              46,
+              99,
+              111,
+              109,
+              34,
+              44,
+              34,
+              103,
+              101,
+              110,
+              100,
+              101,
+              114,
+              34,
+              58,
+              34,
+              102,
+              101,
+              109,
+              97,
+              108,
+              101,
+              34,
+              44,
+              34,
+              115,
+              116,
+              97,
+              116,
+              117,
+              115,
+              34,
+              58,
+              34,
+              97,
+              99,
+              116,
+              105,
+              118,
+              101,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 4171,
+          "responseSize": 102
+        },
+        "id": "64d80e15-3ced-46d1-9e58-c19ca8f31908",
+        "assertions": [
+          {
+            "assertion": "Status code is 201",
+            "skipped": false
+          },
+          {
+            "assertion": "check Json response data",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "5efb854d-4db0-4a51-8f32-1d36096cef8f",
+          "length": 2,
+          "cycles": 3,
+          "position": 1,
+          "iteration": 0,
+          "httpRequestId": "958c8035-f99c-4879-8cfa-91a234abe6f4"
+        },
+        "item": {
+          "id": "3c49a82a-b94f-416e-9151-4084de2ca40d",
+          "name": "updateUserStatus",
+          "request": {
+            "url": {
+              "protocol": "https",
+              "path": [
+                "public",
+                "v2",
+                "users",
+                "{{user_ID}}"
+              ],
+              "host": [
+                "gorest",
+                "co",
+                "in"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{TokenID}}"
+              }
+            ],
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"status\" : \"{{newstatus}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "30298706-fe92-4f81-9e03-1e026e267b39",
+                "type": "text/javascript",
+                "packages": {},
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Is UserStatus update\", function(){\r",
+                  "const jsondata=pm.response.json();\r",
+                  "pm.expect(jsondata.status).to.eql(pm.iterationData.get(\"newstatus\"));\r",
+                  "})\r",
+                  ""
+                ],
+                "_lastExecutionId": "bfca0a80-a7dd-4752-9932-362c99cb6d10"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "https",
+            "path": [
+              "public",
+              "v2",
+              "users",
+              "7790427"
+            ],
+            "host": [
+              "gorest",
+              "co",
+              "in"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Authorization",
+              "value": "Bearer a8290af37229cda22cbe012d9214d84398b21cb3a022824dc9304e0ee10403ae"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json",
+              "system": true
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "d6f45c46-e15b-4f07-9e75-5dbdb0b0cffa",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "gorest.co.in",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "36",
+              "system": true
+            }
+          ],
+          "method": "PUT",
+          "body": {
+            "mode": "raw",
+            "raw": "{\r\n    \"status\" : \"{{newstatus}}\"\r\n}",
+            "options": {
+              "raw": {
+                "language": "json"
+              }
+            }
+          }
+        },
+        "response": {
+          "id": "4f93dd0e-dd38-4458-ae17-14474efda8f1",
+          "status": "Unprocessable Entity",
+          "code": 422,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Sun, 23 Mar 2025 13:39:57 GMT"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "47"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache"
+            },
+            {
+              "key": "feature-policy",
+              "value": "camera 'none'; gyroscope 'none'; microphone 'none'; usb 'none'; fullscreen 'self'"
+            },
+            {
+              "key": "referrer-policy",
+              "value": "strict-origin-when-cross-origin"
+            },
+            {
+              "key": "vary",
+              "value": "Origin"
+            },
+            {
+              "key": "x-content-type-options",
+              "value": "nosniff"
+            },
+            {
+              "key": "x-download-options",
+              "value": "noopen"
+            },
+            {
+              "key": "x-frame-options",
+              "value": "SAMEORIGIN"
+            },
+            {
+              "key": "x-permitted-cross-domain-policies",
+              "value": "none"
+            },
+            {
+              "key": "x-ratelimit-limit",
+              "value": "90"
+            },
+            {
+              "key": "x-ratelimit-remaining",
+              "value": "89"
+            },
+            {
+              "key": "x-ratelimit-reset",
+              "value": "2"
+            },
+            {
+              "key": "x-request-id",
+              "value": "36d0411e-b2bd-419b-8ac1-d4f53414bdf0"
+            },
+            {
+              "key": "x-runtime",
+              "value": "0.039412"
+            },
+            {
+              "key": "x-xss-protection",
+              "value": "0"
+            },
+            {
+              "key": "cf-cache-status",
+              "value": "DYNAMIC"
+            },
+            {
+              "key": "Report-To",
+              "value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v4?s=J3xVAmXyFOoynO10y%2FpiS7UoP%2Fe86sxx%2Frpu6KPMPXkZ0teyX6nNId66dJtDyiDI%2FdwiAAt4J7JB8Pny5vcvtqNrq3WhOxF%2BXyNw5QCFB46vfVmEJYIUuTH2lhQtXPg%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+            },
+            {
+              "key": "NEL",
+              "value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+            },
+            {
+              "key": "Server",
+              "value": "cloudflare"
+            },
+            {
+              "key": "CF-RAY",
+              "value": "924e567edaca493e-BOM"
+            },
+            {
+              "key": "alt-svc",
+              "value": "h3=\":443\"; ma=86400"
+            },
+            {
+              "key": "server-timing",
+              "value": "cfL4;desc=\"?proto=TCP&rtt=37482&min_rtt=36859&rtt_var=11580&sent=8&recv=7&lost=0&retrans=0&sent_bytes=4837&recv_bytes=1423&delivery_rate=105263&cwnd=254&unsent_bytes=0&cid=9386600578dbdfbb&ts=604&x=0\""
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              91,
+              123,
+              34,
+              102,
+              105,
+              101,
+              108,
+              100,
+              34,
+              58,
+              34,
+              115,
+              116,
+              97,
+              116,
+              117,
+              115,
+              34,
+              44,
+              34,
+              109,
+              101,
+              115,
+              115,
+              97,
+              103,
+              101,
+              34,
+              58,
+              34,
+              99,
+              97,
+              110,
+              39,
+              116,
+              32,
+              98,
+              101,
+              32,
+              98,
+              108,
+              97,
+              110,
+              107,
+              34,
+              125,
+              93
+            ]
+          },
+          "cookie": [],
+          "responseTime": 142,
+          "responseSize": 47
+        },
+        "id": "3c49a82a-b94f-416e-9151-4084de2ca40d",
+        "assertions": [
+          {
+            "assertion": "Status code is 200",
+            "skipped": false,
+            "error": {
+              "name": "AssertionError",
+              "index": 0,
+              "test": "Status code is 200",
+              "message": "expected response to have status code 200 but got 422",
+              "stack": "AssertionError: expected response to have status code 200 but got 422\n   at Object.eval sandbox-script.js:1:2)"
+            }
+          },
+          {
+            "assertion": "Is UserStatus update",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "f95acb2d-5adb-4aba-8ad4-3e94e67494f5",
+          "length": 2,
+          "cycles": 3,
+          "position": 0,
+          "iteration": 1,
+          "cr": true,
+          "httpRequestId": "ef51e5ec-edc5-4f4b-9f2e-30903fa7da0f"
+        },
+        "item": {
+          "id": "64d80e15-3ced-46d1-9e58-c19ca8f31908",
+          "name": "1-createMutlipleUsers",
+          "request": {
+            "url": {
+              "path": [
+                "public",
+                "v2",
+                "users"
+              ],
+              "host": [
+                "{{BaseURL}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "status",
+                  "value": "active"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{TokenID}}"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "//fetching name gender and status from test data\r\n\r\n{\r\n    \"name\": \"{{name}}\",\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"gender\": \"{{gender}}\",\r\n    \"status\": \"{{status}}\"\r\n \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "dcc525f1-8366-4eed-ae18-f4b0bb2214fc",
+                "type": "text/javascript",
+                "packages": {},
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {\r",
+                  "    pm.response.to.have.status(201);\r",
+                  "});\r",
+                  "\r",
+                  "//validating expected data with actual data\r",
+                  "pm.test(\"check Json response data\", function (){\r",
+                  "    var jsondata=pm.response.json();\r",
+                  "    pm.expect(jsondata.name).to.eql(pm.iterationData.get(\"name\"));\r",
+                  "    pm.expect(jsondata.gender).to.eql(pm.iterationData.get(\"gender\"));\r",
+                  "    pm.expect(jsondata.status).to.eql(pm.iterationData.get(\"status\"));\r",
+                  "\r",
+                  "    //fetching reuest data email\r",
+                  "    const rawJsonbody=pm.request.body.raw;\r",
+                  "\r",
+                  "    //convertng JSOn to Javascript object\r",
+                  "    const requestBody=JSON.parse(rawJsonbody);\r",
+                  "    const expectedEmail=requestBody.email;\r",
+                  "    console.log(\"Expected email is : \" +expectedEmail);\r",
+                  "    pm.expect(jsondata.email).to.eql(expectedEmail);\r",
+                  "});\r",
+                  "\r",
+                  "const res=pm.response.json();\r",
+                  "const userID=res.id;\r",
+                  "pm.variables.set(\"user_ID\",userID);"
+                ],
+                "_lastExecutionId": "45602b46-d804-4f6a-9055-c523a25d8d62"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "https",
+            "path": [
+              "public",
+              "v2",
+              "users"
+            ],
+            "host": [
+              "gorest",
+              "co",
+              "in"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Authorization",
+              "value": "Bearer a8290af37229cda22cbe012d9214d84398b21cb3a022824dc9304e0ee10403ae"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json",
+              "system": true
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "60fd24a0-c2db-4012-a8d6-6c9382dc795e",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "gorest.co.in",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "131",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "\n\r\n{\r\n    \"name\": \"Anubhav\",\r\n    \"email\": \"Chadrick.Schmitt21@hotmail.com\",\r\n    \"gender\": \"male\",\r\n    \"status\": \"inactive\"\r\n \r\n}",
+            "options": {
+              "raw": {
+                "language": "json"
+              }
+            }
+          }
+        },
+        "response": {
+          "id": "73e40748-4a49-4598-b74d-96848ad63e26",
+          "status": "Created",
+          "code": 201,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Sun, 23 Mar 2025 13:39:58 GMT"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "108"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "max-age=0, private, must-revalidate"
+            },
+            {
+              "key": "etag",
+              "value": "W/\"16d326105d464b1e0175e82753f2037a\""
+            },
+            {
+              "key": "feature-policy",
+              "value": "camera 'none'; gyroscope 'none'; microphone 'none'; usb 'none'; fullscreen 'self'"
+            },
+            {
+              "key": "location",
+              "value": "https://gorest.co.in/public/v2/users/7790428"
+            },
+            {
+              "key": "referrer-policy",
+              "value": "strict-origin-when-cross-origin"
+            },
+            {
+              "key": "vary",
+              "value": "Origin"
+            },
+            {
+              "key": "x-content-type-options",
+              "value": "nosniff"
+            },
+            {
+              "key": "x-download-options",
+              "value": "noopen"
+            },
+            {
+              "key": "x-frame-options",
+              "value": "SAMEORIGIN"
+            },
+            {
+              "key": "x-permitted-cross-domain-policies",
+              "value": "none"
+            },
+            {
+              "key": "x-ratelimit-limit",
+              "value": "90"
+            },
+            {
+              "key": "x-ratelimit-remaining",
+              "value": "88"
+            },
+            {
+              "key": "x-ratelimit-reset",
+              "value": "2"
+            },
+            {
+              "key": "x-request-id",
+              "value": "a0f5d3e2-7aea-491e-9d19-6e282afbe34c"
+            },
+            {
+              "key": "x-runtime",
+              "value": "0.054046"
+            },
+            {
+              "key": "x-xss-protection",
+              "value": "0"
+            },
+            {
+              "key": "cf-cache-status",
+              "value": "DYNAMIC"
+            },
+            {
+              "key": "Report-To",
+              "value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v4?s=Zv1pNH1NdSljpfEDG478V6nwlPc%2Bk9NLZwbvVbXa7%2F%2FkkOJabuoPoqsFlh3goJNRVVeqw2g1xtmzUGiXig5oRuhUkTVSa1FFWN5YS2d7oNgGG5Opjr9oFJ%2FGG6qcuI4%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+            },
+            {
+              "key": "NEL",
+              "value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+            },
+            {
+              "key": "Server",
+              "value": "cloudflare"
+            },
+            {
+              "key": "CF-RAY",
+              "value": "924e56809be3493e-BOM"
+            },
+            {
+              "key": "alt-svc",
+              "value": "h3=\":443\"; ma=86400"
+            },
+            {
+              "key": "server-timing",
+              "value": "cfL4;desc=\"?proto=TCP&rtt=44224&min_rtt=36859&rtt_var=22169&sent=10&recv=9&lost=0&retrans=0&sent_bytes=6204&recv_bytes=1957&delivery_rate=105263&cwnd=255&unsent_bytes=0&cid=9386600578dbdfbb&ts=903&x=0\""
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              105,
+              100,
+              34,
+              58,
+              55,
+              55,
+              57,
+              48,
+              52,
+              50,
+              56,
+              44,
+              34,
+              110,
+              97,
+              109,
+              101,
+              34,
+              58,
+              34,
+              65,
+              110,
+              117,
+              98,
+              104,
+              97,
+              118,
+              34,
+              44,
+              34,
+              101,
+              109,
+              97,
+              105,
+              108,
+              34,
+              58,
+              34,
+              67,
+              104,
+              97,
+              100,
+              114,
+              105,
+              99,
+              107,
+              46,
+              83,
+              99,
+              104,
+              109,
+              105,
+              116,
+              116,
+              50,
+              49,
+              64,
+              104,
+              111,
+              116,
+              109,
+              97,
+              105,
+              108,
+              46,
+              99,
+              111,
+              109,
+              34,
+              44,
+              34,
+              103,
+              101,
+              110,
+              100,
+              101,
+              114,
+              34,
+              58,
+              34,
+              109,
+              97,
+              108,
+              101,
+              34,
+              44,
+              34,
+              115,
+              116,
+              97,
+              116,
+              117,
+              115,
+              34,
+              58,
+              34,
+              105,
+              110,
+              97,
+              99,
+              116,
+              105,
+              118,
+              101,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 133,
+          "responseSize": 108
+        },
+        "id": "64d80e15-3ced-46d1-9e58-c19ca8f31908",
+        "assertions": [
+          {
+            "assertion": "Status code is 201",
+            "skipped": false
+          },
+          {
+            "assertion": "check Json response data",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "22150426-a9fc-455a-bcbd-4014cf70895c",
+          "length": 2,
+          "cycles": 3,
+          "position": 1,
+          "iteration": 1,
+          "httpRequestId": "2c2fa524-5a06-4ff2-ab5e-8094313067ba"
+        },
+        "item": {
+          "id": "3c49a82a-b94f-416e-9151-4084de2ca40d",
+          "name": "updateUserStatus",
+          "request": {
+            "url": {
+              "protocol": "https",
+              "path": [
+                "public",
+                "v2",
+                "users",
+                "{{user_ID}}"
+              ],
+              "host": [
+                "gorest",
+                "co",
+                "in"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{TokenID}}"
+              }
+            ],
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"status\" : \"{{newstatus}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "30298706-fe92-4f81-9e03-1e026e267b39",
+                "type": "text/javascript",
+                "packages": {},
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Is UserStatus update\", function(){\r",
+                  "const jsondata=pm.response.json();\r",
+                  "pm.expect(jsondata.status).to.eql(pm.iterationData.get(\"newstatus\"));\r",
+                  "})\r",
+                  ""
+                ],
+                "_lastExecutionId": "bfca0a80-a7dd-4752-9932-362c99cb6d10"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "https",
+            "path": [
+              "public",
+              "v2",
+              "users",
+              "7790428"
+            ],
+            "host": [
+              "gorest",
+              "co",
+              "in"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Authorization",
+              "value": "Bearer a8290af37229cda22cbe012d9214d84398b21cb3a022824dc9304e0ee10403ae"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json",
+              "system": true
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "1491eda0-6423-4601-849b-f7e0954308f5",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "gorest.co.in",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "36",
+              "system": true
+            }
+          ],
+          "method": "PUT",
+          "body": {
+            "mode": "raw",
+            "raw": "{\r\n    \"status\" : \"{{newstatus}}\"\r\n}",
+            "options": {
+              "raw": {
+                "language": "json"
+              }
+            }
+          }
+        },
+        "response": {
+          "id": "6ee17b9d-f0d3-4261-ab9a-e906deecf0b3",
+          "status": "Unprocessable Entity",
+          "code": 422,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Sun, 23 Mar 2025 13:39:58 GMT"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "47"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache"
+            },
+            {
+              "key": "feature-policy",
+              "value": "camera 'none'; gyroscope 'none'; microphone 'none'; usb 'none'; fullscreen 'self'"
+            },
+            {
+              "key": "referrer-policy",
+              "value": "strict-origin-when-cross-origin"
+            },
+            {
+              "key": "vary",
+              "value": "Origin"
+            },
+            {
+              "key": "x-content-type-options",
+              "value": "nosniff"
+            },
+            {
+              "key": "x-download-options",
+              "value": "noopen"
+            },
+            {
+              "key": "x-frame-options",
+              "value": "SAMEORIGIN"
+            },
+            {
+              "key": "x-permitted-cross-domain-policies",
+              "value": "none"
+            },
+            {
+              "key": "x-ratelimit-limit",
+              "value": "90"
+            },
+            {
+              "key": "x-ratelimit-remaining",
+              "value": "87"
+            },
+            {
+              "key": "x-ratelimit-reset",
+              "value": "3"
+            },
+            {
+              "key": "x-request-id",
+              "value": "748e416e-23a7-4a70-9268-786b8a511f85"
+            },
+            {
+              "key": "x-runtime",
+              "value": "0.058690"
+            },
+            {
+              "key": "x-xss-protection",
+              "value": "0"
+            },
+            {
+              "key": "cf-cache-status",
+              "value": "DYNAMIC"
+            },
+            {
+              "key": "Report-To",
+              "value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v4?s=nN%2FiRhOUIacQWY4JvD4c4z4%2FfEawXoUZ8exmgdJfZFY2r7csgSWKcOjYgp%2B4Pnok8%2BVq1ffXC3btWMwS9hnG8xdUS8sjFuMzLsoN2XsnQnjmteJAsTrzEKLcaUYBReY%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+            },
+            {
+              "key": "NEL",
+              "value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+            },
+            {
+              "key": "Server",
+              "value": "cloudflare"
+            },
+            {
+              "key": "CF-RAY",
+              "value": "924e5681eca9493e-BOM"
+            },
+            {
+              "key": "alt-svc",
+              "value": "h3=\":443\"; ma=86400"
+            },
+            {
+              "key": "server-timing",
+              "value": "cfL4;desc=\"?proto=TCP&rtt=43363&min_rtt=36859&rtt_var=18348&sent=13&recv=11&lost=0&retrans=0&sent_bytes=7768&recv_bytes=2402&delivery_rate=105263&cwnd=257&unsent_bytes=0&cid=9386600578dbdfbb&ts=1125&x=0\""
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              91,
+              123,
+              34,
+              102,
+              105,
+              101,
+              108,
+              100,
+              34,
+              58,
+              34,
+              115,
+              116,
+              97,
+              116,
+              117,
+              115,
+              34,
+              44,
+              34,
+              109,
+              101,
+              115,
+              115,
+              97,
+              103,
+              101,
+              34,
+              58,
+              34,
+              99,
+              97,
+              110,
+              39,
+              116,
+              32,
+              98,
+              101,
+              32,
+              98,
+              108,
+              97,
+              110,
+              107,
+              34,
+              125,
+              93
+            ]
+          },
+          "cookie": [],
+          "responseTime": 154,
+          "responseSize": 47
+        },
+        "id": "3c49a82a-b94f-416e-9151-4084de2ca40d",
+        "assertions": [
+          {
+            "assertion": "Status code is 200",
+            "skipped": false,
+            "error": {
+              "name": "AssertionError",
+              "index": 0,
+              "test": "Status code is 200",
+              "message": "expected response to have status code 200 but got 422",
+              "stack": "AssertionError: expected response to have status code 200 but got 422\n   at Object.eval sandbox-script.js:1:2)"
+            }
+          },
+          {
+            "assertion": "Is UserStatus update",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "275393dd-62ee-4f39-b3e6-21be6e54f365",
+          "length": 2,
+          "cycles": 3,
+          "position": 0,
+          "iteration": 2,
+          "cr": true,
+          "httpRequestId": "d9d8c850-7125-41e7-8f0e-cc826eb2edc8"
+        },
+        "item": {
+          "id": "64d80e15-3ced-46d1-9e58-c19ca8f31908",
+          "name": "1-createMutlipleUsers",
+          "request": {
+            "url": {
+              "path": [
+                "public",
+                "v2",
+                "users"
+              ],
+              "host": [
+                "{{BaseURL}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "status",
+                  "value": "active"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{TokenID}}"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "//fetching name gender and status from test data\r\n\r\n{\r\n    \"name\": \"{{name}}\",\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"gender\": \"{{gender}}\",\r\n    \"status\": \"{{status}}\"\r\n \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "dcc525f1-8366-4eed-ae18-f4b0bb2214fc",
+                "type": "text/javascript",
+                "packages": {},
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {\r",
+                  "    pm.response.to.have.status(201);\r",
+                  "});\r",
+                  "\r",
+                  "//validating expected data with actual data\r",
+                  "pm.test(\"check Json response data\", function (){\r",
+                  "    var jsondata=pm.response.json();\r",
+                  "    pm.expect(jsondata.name).to.eql(pm.iterationData.get(\"name\"));\r",
+                  "    pm.expect(jsondata.gender).to.eql(pm.iterationData.get(\"gender\"));\r",
+                  "    pm.expect(jsondata.status).to.eql(pm.iterationData.get(\"status\"));\r",
+                  "\r",
+                  "    //fetching reuest data email\r",
+                  "    const rawJsonbody=pm.request.body.raw;\r",
+                  "\r",
+                  "    //convertng JSOn to Javascript object\r",
+                  "    const requestBody=JSON.parse(rawJsonbody);\r",
+                  "    const expectedEmail=requestBody.email;\r",
+                  "    console.log(\"Expected email is : \" +expectedEmail);\r",
+                  "    pm.expect(jsondata.email).to.eql(expectedEmail);\r",
+                  "});\r",
+                  "\r",
+                  "const res=pm.response.json();\r",
+                  "const userID=res.id;\r",
+                  "pm.variables.set(\"user_ID\",userID);"
+                ],
+                "_lastExecutionId": "45602b46-d804-4f6a-9055-c523a25d8d62"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "https",
+            "path": [
+              "public",
+              "v2",
+              "users"
+            ],
+            "host": [
+              "gorest",
+              "co",
+              "in"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Authorization",
+              "value": "Bearer a8290af37229cda22cbe012d9214d84398b21cb3a022824dc9304e0ee10403ae"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json",
+              "system": true
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "b9da7ef5-498a-4a9b-8773-340be1c2c283",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "gorest.co.in",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "127",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "\n\r\n{\r\n    \"name\": \"shubhi\",\r\n    \"email\": \"Jeffry.Leuschke@gmail.com\",\r\n    \"gender\": \"female\",\r\n    \"status\": \"inactive\"\r\n \r\n}",
+            "options": {
+              "raw": {
+                "language": "json"
+              }
+            }
+          }
+        },
+        "response": {
+          "id": "34fb9f0d-f081-4f8b-91d1-ca8f9b01f3b1",
+          "status": "Created",
+          "code": 201,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Sun, 23 Mar 2025 13:39:58 GMT"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "104"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "max-age=0, private, must-revalidate"
+            },
+            {
+              "key": "etag",
+              "value": "W/\"073f8ea5392b164550b9acbe63bb4047\""
+            },
+            {
+              "key": "feature-policy",
+              "value": "camera 'none'; gyroscope 'none'; microphone 'none'; usb 'none'; fullscreen 'self'"
+            },
+            {
+              "key": "location",
+              "value": "https://gorest.co.in/public/v2/users/7790429"
+            },
+            {
+              "key": "referrer-policy",
+              "value": "strict-origin-when-cross-origin"
+            },
+            {
+              "key": "vary",
+              "value": "Origin"
+            },
+            {
+              "key": "x-content-type-options",
+              "value": "nosniff"
+            },
+            {
+              "key": "x-download-options",
+              "value": "noopen"
+            },
+            {
+              "key": "x-frame-options",
+              "value": "SAMEORIGIN"
+            },
+            {
+              "key": "x-permitted-cross-domain-policies",
+              "value": "none"
+            },
+            {
+              "key": "x-ratelimit-limit",
+              "value": "90"
+            },
+            {
+              "key": "x-ratelimit-remaining",
+              "value": "86"
+            },
+            {
+              "key": "x-ratelimit-reset",
+              "value": "4"
+            },
+            {
+              "key": "x-request-id",
+              "value": "3b359f25-9caa-4111-91a5-627d3c5a3921"
+            },
+            {
+              "key": "x-runtime",
+              "value": "0.080844"
+            },
+            {
+              "key": "x-xss-protection",
+              "value": "0"
+            },
+            {
+              "key": "cf-cache-status",
+              "value": "DYNAMIC"
+            },
+            {
+              "key": "Report-To",
+              "value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v4?s=L%2BzzhQEsIhzGkiV1asHMTlrocAwxk672%2B8%2BFBqPBy%2Bn2Qceh3eKwTXuTsywLerKs1l8%2FdKe8CagmByMK9OnUuqYypXdWI8p8%2BlbBJpR1UO40iAFJmLfTE1czX23jrH0%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+            },
+            {
+              "key": "NEL",
+              "value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+            },
+            {
+              "key": "Server",
+              "value": "cloudflare"
+            },
+            {
+              "key": "CF-RAY",
+              "value": "924e56835dca493e-BOM"
+            },
+            {
+              "key": "alt-svc",
+              "value": "h3=\":443\"; ma=86400"
+            },
+            {
+              "key": "server-timing",
+              "value": "cfL4;desc=\"?proto=TCP&rtt=48534&min_rtt=36859&rtt_var=24103&sent=15&recv=13&lost=0&retrans=0&sent_bytes=9136&recv_bytes=2932&delivery_rate=105263&cwnd=257&unsent_bytes=0&cid=9386600578dbdfbb&ts=1378&x=0\""
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              105,
+              100,
+              34,
+              58,
+              55,
+              55,
+              57,
+              48,
+              52,
+              50,
+              57,
+              44,
+              34,
+              110,
+              97,
+              109,
+              101,
+              34,
+              58,
+              34,
+              115,
+              104,
+              117,
+              98,
+              104,
+              105,
+              34,
+              44,
+              34,
+              101,
+              109,
+              97,
+              105,
+              108,
+              34,
+              58,
+              34,
+              74,
+              101,
+              102,
+              102,
+              114,
+              121,
+              46,
+              76,
+              101,
+              117,
+              115,
+              99,
+              104,
+              107,
+              101,
+              64,
+              103,
+              109,
+              97,
+              105,
+              108,
+              46,
+              99,
+              111,
+              109,
+              34,
+              44,
+              34,
+              103,
+              101,
+              110,
+              100,
+              101,
+              114,
+              34,
+              58,
+              34,
+              102,
+              101,
+              109,
+              97,
+              108,
+              101,
+              34,
+              44,
+              34,
+              115,
+              116,
+              97,
+              116,
+              117,
+              115,
+              34,
+              58,
+              34,
+              105,
+              110,
+              97,
+              99,
+              116,
+              105,
+              118,
+              101,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 181,
+          "responseSize": 104
+        },
+        "id": "64d80e15-3ced-46d1-9e58-c19ca8f31908",
+        "assertions": [
+          {
+            "assertion": "Status code is 201",
+            "skipped": false
+          },
+          {
+            "assertion": "check Json response data",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "48236e92-09b3-49cb-bad7-c2135144e9a0",
+          "length": 2,
+          "cycles": 3,
+          "position": 1,
+          "iteration": 2,
+          "httpRequestId": "2272bea0-3091-40b1-8a86-63d9139b214f"
+        },
+        "item": {
+          "id": "3c49a82a-b94f-416e-9151-4084de2ca40d",
+          "name": "updateUserStatus",
+          "request": {
+            "url": {
+              "protocol": "https",
+              "path": [
+                "public",
+                "v2",
+                "users",
+                "{{user_ID}}"
+              ],
+              "host": [
+                "gorest",
+                "co",
+                "in"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{TokenID}}"
+              }
+            ],
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"status\" : \"{{newstatus}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "30298706-fe92-4f81-9e03-1e026e267b39",
+                "type": "text/javascript",
+                "packages": {},
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Is UserStatus update\", function(){\r",
+                  "const jsondata=pm.response.json();\r",
+                  "pm.expect(jsondata.status).to.eql(pm.iterationData.get(\"newstatus\"));\r",
+                  "})\r",
+                  ""
+                ],
+                "_lastExecutionId": "bfca0a80-a7dd-4752-9932-362c99cb6d10"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "https",
+            "path": [
+              "public",
+              "v2",
+              "users",
+              "7790429"
+            ],
+            "host": [
+              "gorest",
+              "co",
+              "in"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Authorization",
+              "value": "Bearer a8290af37229cda22cbe012d9214d84398b21cb3a022824dc9304e0ee10403ae"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json",
+              "system": true
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "f23a3900-cf50-41e6-9e9b-87d5bb39bc32",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "gorest.co.in",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "36",
+              "system": true
+            }
+          ],
+          "method": "PUT",
+          "body": {
+            "mode": "raw",
+            "raw": "{\r\n    \"status\" : \"{{newstatus}}\"\r\n}",
+            "options": {
+              "raw": {
+                "language": "json"
+              }
+            }
+          }
+        },
+        "response": {
+          "id": "2ca60e03-d5cd-4f27-a979-e812d5378e11",
+          "status": "Unprocessable Entity",
+          "code": 422,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Sun, 23 Mar 2025 13:39:58 GMT"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "47"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache"
+            },
+            {
+              "key": "feature-policy",
+              "value": "camera 'none'; gyroscope 'none'; microphone 'none'; usb 'none'; fullscreen 'self'"
+            },
+            {
+              "key": "referrer-policy",
+              "value": "strict-origin-when-cross-origin"
+            },
+            {
+              "key": "vary",
+              "value": "Origin"
+            },
+            {
+              "key": "x-content-type-options",
+              "value": "nosniff"
+            },
+            {
+              "key": "x-download-options",
+              "value": "noopen"
+            },
+            {
+              "key": "x-frame-options",
+              "value": "SAMEORIGIN"
+            },
+            {
+              "key": "x-permitted-cross-domain-policies",
+              "value": "none"
+            },
+            {
+              "key": "x-ratelimit-limit",
+              "value": "90"
+            },
+            {
+              "key": "x-ratelimit-remaining",
+              "value": "85"
+            },
+            {
+              "key": "x-ratelimit-reset",
+              "value": "4"
+            },
+            {
+              "key": "x-request-id",
+              "value": "e3ccd620-a6e9-4667-8584-81ffed0bed06"
+            },
+            {
+              "key": "x-runtime",
+              "value": "0.039772"
+            },
+            {
+              "key": "x-xss-protection",
+              "value": "0"
+            },
+            {
+              "key": "cf-cache-status",
+              "value": "DYNAMIC"
+            },
+            {
+              "key": "Report-To",
+              "value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v4?s=K7fZ5k9yekPXUFbX8JKtRedD3w3BS%2B3WmNIhMEmLgNSrIqaI3PBshM68w7k0iPQfUqPa4wRFSt%2Fow8P3m%2Bu%2F%2BzXv7r9ARX7zWoq90ZAO41EzWImBX5DAeOMjuAsJXV4%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+            },
+            {
+              "key": "NEL",
+              "value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+            },
+            {
+              "key": "Server",
+              "value": "cloudflare"
+            },
+            {
+              "key": "CF-RAY",
+              "value": "924e56850ee1493e-BOM"
+            },
+            {
+              "key": "alt-svc",
+              "value": "h3=\":443\"; ma=86400"
+            },
+            {
+              "key": "server-timing",
+              "value": "cfL4;desc=\"?proto=TCP&rtt=47355&min_rtt=36859&rtt_var=20435&sent=18&recv=15&lost=0&retrans=0&sent_bytes=10702&recv_bytes=3377&delivery_rate=105263&cwnd=257&unsent_bytes=0&cid=9386600578dbdfbb&ts=1609&x=0\""
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              91,
+              123,
+              34,
+              102,
+              105,
+              101,
+              108,
+              100,
+              34,
+              58,
+              34,
+              115,
+              116,
+              97,
+              116,
+              117,
+              115,
+              34,
+              44,
+              34,
+              109,
+              101,
+              115,
+              115,
+              97,
+              103,
+              101,
+              34,
+              58,
+              34,
+              99,
+              97,
+              110,
+              39,
+              116,
+              32,
+              98,
+              101,
+              32,
+              98,
+              108,
+              97,
+              110,
+              107,
+              34,
+              125,
+              93
+            ]
+          },
+          "cookie": [],
+          "responseTime": 132,
+          "responseSize": 47
+        },
+        "id": "3c49a82a-b94f-416e-9151-4084de2ca40d",
+        "assertions": [
+          {
+            "assertion": "Status code is 200",
+            "skipped": false,
+            "error": {
+              "name": "AssertionError",
+              "index": 0,
+              "test": "Status code is 200",
+              "message": "expected response to have status code 200 but got 422",
+              "stack": "AssertionError: expected response to have status code 200 but got 422\n   at Object.eval sandbox-script.js:1:2)"
+            }
+          },
+          {
+            "assertion": "Is UserStatus update",
+            "skipped": false
+          }
+        ]
+      }
+    ],
+    "transfers": {
+      "responseTotal": 455
+    },
+    "failures": [
+      {
+        "error": {
+          "name": "AssertionError",
+          "index": 0,
+          "test": "Status code is 200",
+          "message": "expected response to have status code 200 but got 422",
+          "stack": "AssertionError: expected response to have status code 200 but got 422\n   at Object.eval sandbox-script.js:1:2)",
+          "checksum": "20180b6ab90ae8a926dca855debef1e5",
+          "id": "9dead7f0-21af-4118-ace7-23055dcef983",
+          "timestamp": 1742737198930,
+          "stacktrace": [
+            {
+              "fileName": "sandbox-script.js",
+              "lineNumber": 1,
+              "functionName": "Object.eval",
+              "typeName": "Object",
+              "methodName": "eval",
+              "columnNumber": 2,
+              "native": false
+            }
+          ]
+        },
+        "at": "assertion:0 in test-script",
+        "source": {
+          "id": "3c49a82a-b94f-416e-9151-4084de2ca40d",
+          "name": "updateUserStatus",
+          "request": {
+            "url": {
+              "protocol": "https",
+              "path": [
+                "public",
+                "v2",
+                "users",
+                "{{user_ID}}"
+              ],
+              "host": [
+                "gorest",
+                "co",
+                "in"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{TokenID}}"
+              }
+            ],
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"status\" : \"{{newstatus}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "30298706-fe92-4f81-9e03-1e026e267b39",
+                "type": "text/javascript",
+                "packages": {},
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Is UserStatus update\", function(){\r",
+                  "const jsondata=pm.response.json();\r",
+                  "pm.expect(jsondata.status).to.eql(pm.iterationData.get(\"newstatus\"));\r",
+                  "})\r",
+                  ""
+                ],
+                "_lastExecutionId": "bfca0a80-a7dd-4752-9932-362c99cb6d10"
+              }
+            }
+          ]
+        },
+        "parent": {
+          "_": {
+            "postman_id": "baa91685-82e1-4c3c-aef7-90f4637f3fb7",
+            "exporter_id": "41844441"
+          },
+          "item": [
+            {
+              "id": "64d80e15-3ced-46d1-9e58-c19ca8f31908",
+              "name": "1-createMutlipleUsers",
+              "request": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "users"
+                  ],
+                  "host": [
+                    "{{BaseURL}}"
+                  ],
+                  "query": [
+                    {
+                      "disabled": true,
+                      "key": "status",
+                      "value": "active"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{TokenID}}"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "//fetching name gender and status from test data\r\n\r\n{\r\n    \"name\": \"{{name}}\",\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"gender\": \"{{gender}}\",\r\n    \"status\": \"{{status}}\"\r\n \r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "dcc525f1-8366-4eed-ae18-f4b0bb2214fc",
+                    "type": "text/javascript",
+                    "packages": {},
+                    "exec": [
+                      "pm.test(\"Status code is 201\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "});\r",
+                      "\r",
+                      "//validating expected data with actual data\r",
+                      "pm.test(\"check Json response data\", function (){\r",
+                      "    var jsondata=pm.response.json();\r",
+                      "    pm.expect(jsondata.name).to.eql(pm.iterationData.get(\"name\"));\r",
+                      "    pm.expect(jsondata.gender).to.eql(pm.iterationData.get(\"gender\"));\r",
+                      "    pm.expect(jsondata.status).to.eql(pm.iterationData.get(\"status\"));\r",
+                      "\r",
+                      "    //fetching reuest data email\r",
+                      "    const rawJsonbody=pm.request.body.raw;\r",
+                      "\r",
+                      "    //convertng JSOn to Javascript object\r",
+                      "    const requestBody=JSON.parse(rawJsonbody);\r",
+                      "    const expectedEmail=requestBody.email;\r",
+                      "    console.log(\"Expected email is : \" +expectedEmail);\r",
+                      "    pm.expect(jsondata.email).to.eql(expectedEmail);\r",
+                      "});\r",
+                      "\r",
+                      "const res=pm.response.json();\r",
+                      "const userID=res.id;\r",
+                      "pm.variables.set(\"user_ID\",userID);"
+                    ],
+                    "_lastExecutionId": "45602b46-d804-4f6a-9055-c523a25d8d62"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "3c49a82a-b94f-416e-9151-4084de2ca40d",
+              "name": "updateUserStatus",
+              "request": {
+                "url": {
+                  "protocol": "https",
+                  "path": [
+                    "public",
+                    "v2",
+                    "users",
+                    "{{user_ID}}"
+                  ],
+                  "host": [
+                    "gorest",
+                    "co",
+                    "in"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{TokenID}}"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"status\" : \"{{newstatus}}\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "30298706-fe92-4f81-9e03-1e026e267b39",
+                    "type": "text/javascript",
+                    "packages": {},
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Is UserStatus update\", function(){\r",
+                      "const jsondata=pm.response.json();\r",
+                      "pm.expect(jsondata.status).to.eql(pm.iterationData.get(\"newstatus\"));\r",
+                      "})\r",
+                      ""
+                    ],
+                    "_lastExecutionId": "bfca0a80-a7dd-4752-9932-362c99cb6d10"
+                  }
+                }
+              ]
+            }
+          ],
+          "event": [],
+          "variable": [],
+          "info": {
+            "_postman_id": "baa91685-82e1-4c3c-aef7-90f4637f3fb7",
+            "name": "DataDriverAPI_Testing",
+            "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+          }
+        },
+        "cursor": {
+          "ref": "5efb854d-4db0-4a51-8f32-1d36096cef8f",
+          "length": 2,
+          "cycles": 3,
+          "position": 1,
+          "iteration": 0,
+          "httpRequestId": "958c8035-f99c-4879-8cfa-91a234abe6f4",
+          "scriptId": "30298706-fe92-4f81-9e03-1e026e267b39",
+          "execution": "7f057ec8-0c24-4207-9890-db82c32e864f"
+        }
+      },
+      {
+        "error": {
+          "name": "AssertionError",
+          "index": 0,
+          "test": "Status code is 200",
+          "message": "expected response to have status code 200 but got 422",
+          "stack": "AssertionError: expected response to have status code 200 but got 422\n   at Object.eval sandbox-script.js:1:2)",
+          "checksum": "20180b6ab90ae8a926dca855debef1e5",
+          "id": "8378385d-a158-4cfb-b181-99b4c5a8431d",
+          "timestamp": 1742737199417,
+          "stacktrace": [
+            {
+              "fileName": "sandbox-script.js",
+              "lineNumber": 1,
+              "functionName": "Object.eval",
+              "typeName": "Object",
+              "methodName": "eval",
+              "columnNumber": 2,
+              "native": false
+            }
+          ]
+        },
+        "at": "assertion:0 in test-script",
+        "source": {
+          "id": "3c49a82a-b94f-416e-9151-4084de2ca40d",
+          "name": "updateUserStatus",
+          "request": {
+            "url": {
+              "protocol": "https",
+              "path": [
+                "public",
+                "v2",
+                "users",
+                "{{user_ID}}"
+              ],
+              "host": [
+                "gorest",
+                "co",
+                "in"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{TokenID}}"
+              }
+            ],
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"status\" : \"{{newstatus}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "30298706-fe92-4f81-9e03-1e026e267b39",
+                "type": "text/javascript",
+                "packages": {},
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Is UserStatus update\", function(){\r",
+                  "const jsondata=pm.response.json();\r",
+                  "pm.expect(jsondata.status).to.eql(pm.iterationData.get(\"newstatus\"));\r",
+                  "})\r",
+                  ""
+                ],
+                "_lastExecutionId": "bfca0a80-a7dd-4752-9932-362c99cb6d10"
+              }
+            }
+          ]
+        },
+        "parent": {
+          "_": {
+            "postman_id": "baa91685-82e1-4c3c-aef7-90f4637f3fb7",
+            "exporter_id": "41844441"
+          },
+          "item": [
+            {
+              "id": "64d80e15-3ced-46d1-9e58-c19ca8f31908",
+              "name": "1-createMutlipleUsers",
+              "request": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "users"
+                  ],
+                  "host": [
+                    "{{BaseURL}}"
+                  ],
+                  "query": [
+                    {
+                      "disabled": true,
+                      "key": "status",
+                      "value": "active"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{TokenID}}"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "//fetching name gender and status from test data\r\n\r\n{\r\n    \"name\": \"{{name}}\",\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"gender\": \"{{gender}}\",\r\n    \"status\": \"{{status}}\"\r\n \r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "dcc525f1-8366-4eed-ae18-f4b0bb2214fc",
+                    "type": "text/javascript",
+                    "packages": {},
+                    "exec": [
+                      "pm.test(\"Status code is 201\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "});\r",
+                      "\r",
+                      "//validating expected data with actual data\r",
+                      "pm.test(\"check Json response data\", function (){\r",
+                      "    var jsondata=pm.response.json();\r",
+                      "    pm.expect(jsondata.name).to.eql(pm.iterationData.get(\"name\"));\r",
+                      "    pm.expect(jsondata.gender).to.eql(pm.iterationData.get(\"gender\"));\r",
+                      "    pm.expect(jsondata.status).to.eql(pm.iterationData.get(\"status\"));\r",
+                      "\r",
+                      "    //fetching reuest data email\r",
+                      "    const rawJsonbody=pm.request.body.raw;\r",
+                      "\r",
+                      "    //convertng JSOn to Javascript object\r",
+                      "    const requestBody=JSON.parse(rawJsonbody);\r",
+                      "    const expectedEmail=requestBody.email;\r",
+                      "    console.log(\"Expected email is : \" +expectedEmail);\r",
+                      "    pm.expect(jsondata.email).to.eql(expectedEmail);\r",
+                      "});\r",
+                      "\r",
+                      "const res=pm.response.json();\r",
+                      "const userID=res.id;\r",
+                      "pm.variables.set(\"user_ID\",userID);"
+                    ],
+                    "_lastExecutionId": "45602b46-d804-4f6a-9055-c523a25d8d62"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "3c49a82a-b94f-416e-9151-4084de2ca40d",
+              "name": "updateUserStatus",
+              "request": {
+                "url": {
+                  "protocol": "https",
+                  "path": [
+                    "public",
+                    "v2",
+                    "users",
+                    "{{user_ID}}"
+                  ],
+                  "host": [
+                    "gorest",
+                    "co",
+                    "in"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{TokenID}}"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"status\" : \"{{newstatus}}\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "30298706-fe92-4f81-9e03-1e026e267b39",
+                    "type": "text/javascript",
+                    "packages": {},
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Is UserStatus update\", function(){\r",
+                      "const jsondata=pm.response.json();\r",
+                      "pm.expect(jsondata.status).to.eql(pm.iterationData.get(\"newstatus\"));\r",
+                      "})\r",
+                      ""
+                    ],
+                    "_lastExecutionId": "bfca0a80-a7dd-4752-9932-362c99cb6d10"
+                  }
+                }
+              ]
+            }
+          ],
+          "event": [],
+          "variable": [],
+          "info": {
+            "_postman_id": "baa91685-82e1-4c3c-aef7-90f4637f3fb7",
+            "name": "DataDriverAPI_Testing",
+            "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+          }
+        },
+        "cursor": {
+          "ref": "22150426-a9fc-455a-bcbd-4014cf70895c",
+          "length": 2,
+          "cycles": 3,
+          "position": 1,
+          "iteration": 1,
+          "httpRequestId": "2c2fa524-5a06-4ff2-ab5e-8094313067ba",
+          "scriptId": "30298706-fe92-4f81-9e03-1e026e267b39",
+          "execution": "e6246d0e-1093-42ac-b7d9-b0f97fc297a2"
+        }
+      },
+      {
+        "error": {
+          "name": "AssertionError",
+          "index": 0,
+          "test": "Status code is 200",
+          "message": "expected response to have status code 200 but got 422",
+          "stack": "AssertionError: expected response to have status code 200 but got 422\n   at Object.eval sandbox-script.js:1:2)",
+          "checksum": "20180b6ab90ae8a926dca855debef1e5",
+          "id": "30188010-bb16-45ef-bb0f-6b7f6b69d936",
+          "timestamp": 1742737200028,
+          "stacktrace": [
+            {
+              "fileName": "sandbox-script.js",
+              "lineNumber": 1,
+              "functionName": "Object.eval",
+              "typeName": "Object",
+              "methodName": "eval",
+              "columnNumber": 2,
+              "native": false
+            }
+          ]
+        },
+        "at": "assertion:0 in test-script",
+        "source": {
+          "id": "3c49a82a-b94f-416e-9151-4084de2ca40d",
+          "name": "updateUserStatus",
+          "request": {
+            "url": {
+              "protocol": "https",
+              "path": [
+                "public",
+                "v2",
+                "users",
+                "{{user_ID}}"
+              ],
+              "host": [
+                "gorest",
+                "co",
+                "in"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{TokenID}}"
+              }
+            ],
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"status\" : \"{{newstatus}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "30298706-fe92-4f81-9e03-1e026e267b39",
+                "type": "text/javascript",
+                "packages": {},
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Is UserStatus update\", function(){\r",
+                  "const jsondata=pm.response.json();\r",
+                  "pm.expect(jsondata.status).to.eql(pm.iterationData.get(\"newstatus\"));\r",
+                  "})\r",
+                  ""
+                ],
+                "_lastExecutionId": "bfca0a80-a7dd-4752-9932-362c99cb6d10"
+              }
+            }
+          ]
+        },
+        "parent": {
+          "_": {
+            "postman_id": "baa91685-82e1-4c3c-aef7-90f4637f3fb7",
+            "exporter_id": "41844441"
+          },
+          "item": [
+            {
+              "id": "64d80e15-3ced-46d1-9e58-c19ca8f31908",
+              "name": "1-createMutlipleUsers",
+              "request": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v2",
+                    "users"
+                  ],
+                  "host": [
+                    "{{BaseURL}}"
+                  ],
+                  "query": [
+                    {
+                      "disabled": true,
+                      "key": "status",
+                      "value": "active"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{TokenID}}"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "//fetching name gender and status from test data\r\n\r\n{\r\n    \"name\": \"{{name}}\",\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"gender\": \"{{gender}}\",\r\n    \"status\": \"{{status}}\"\r\n \r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "dcc525f1-8366-4eed-ae18-f4b0bb2214fc",
+                    "type": "text/javascript",
+                    "packages": {},
+                    "exec": [
+                      "pm.test(\"Status code is 201\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "});\r",
+                      "\r",
+                      "//validating expected data with actual data\r",
+                      "pm.test(\"check Json response data\", function (){\r",
+                      "    var jsondata=pm.response.json();\r",
+                      "    pm.expect(jsondata.name).to.eql(pm.iterationData.get(\"name\"));\r",
+                      "    pm.expect(jsondata.gender).to.eql(pm.iterationData.get(\"gender\"));\r",
+                      "    pm.expect(jsondata.status).to.eql(pm.iterationData.get(\"status\"));\r",
+                      "\r",
+                      "    //fetching reuest data email\r",
+                      "    const rawJsonbody=pm.request.body.raw;\r",
+                      "\r",
+                      "    //convertng JSOn to Javascript object\r",
+                      "    const requestBody=JSON.parse(rawJsonbody);\r",
+                      "    const expectedEmail=requestBody.email;\r",
+                      "    console.log(\"Expected email is : \" +expectedEmail);\r",
+                      "    pm.expect(jsondata.email).to.eql(expectedEmail);\r",
+                      "});\r",
+                      "\r",
+                      "const res=pm.response.json();\r",
+                      "const userID=res.id;\r",
+                      "pm.variables.set(\"user_ID\",userID);"
+                    ],
+                    "_lastExecutionId": "45602b46-d804-4f6a-9055-c523a25d8d62"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "3c49a82a-b94f-416e-9151-4084de2ca40d",
+              "name": "updateUserStatus",
+              "request": {
+                "url": {
+                  "protocol": "https",
+                  "path": [
+                    "public",
+                    "v2",
+                    "users",
+                    "{{user_ID}}"
+                  ],
+                  "host": [
+                    "gorest",
+                    "co",
+                    "in"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{TokenID}}"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"status\" : \"{{newstatus}}\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "30298706-fe92-4f81-9e03-1e026e267b39",
+                    "type": "text/javascript",
+                    "packages": {},
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Is UserStatus update\", function(){\r",
+                      "const jsondata=pm.response.json();\r",
+                      "pm.expect(jsondata.status).to.eql(pm.iterationData.get(\"newstatus\"));\r",
+                      "})\r",
+                      ""
+                    ],
+                    "_lastExecutionId": "bfca0a80-a7dd-4752-9932-362c99cb6d10"
+                  }
+                }
+              ]
+            }
+          ],
+          "event": [],
+          "variable": [],
+          "info": {
+            "_postman_id": "baa91685-82e1-4c3c-aef7-90f4637f3fb7",
+            "name": "DataDriverAPI_Testing",
+            "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+          }
+        },
+        "cursor": {
+          "ref": "48236e92-09b3-49cb-bad7-c2135144e9a0",
+          "length": 2,
+          "cycles": 3,
+          "position": 1,
+          "iteration": 2,
+          "httpRequestId": "2272bea0-3091-40b1-8a86-63d9139b214f",
+          "scriptId": "30298706-fe92-4f81-9e03-1e026e267b39",
+          "execution": "bfca0a80-a7dd-4752-9932-362c99cb6d10"
+        }
+      }
+    ],
+    "error": null
+  }
+}

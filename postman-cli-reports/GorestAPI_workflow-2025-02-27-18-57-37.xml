@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="GorestAPI_workflow" tests="6" time="4.190">
+  <testsuite name="1-GetAllUsers" id="d1e06fb6-b47e-460c-a8ab-5dd866c95191" timestamp="2025-02-27T13:27:31.776Z" tests="1" failures="0" errors="0" time="1.162">
+    <testcase name="Status code is 200" time="1.162" classname="1GetAllUsers"/>
+  </testsuite>
+  <testsuite name="2-Create_User" id="c8de8167-d568-461e-93ce-c6fd5ec36a54" timestamp="2025-02-27T13:27:31.776Z" tests="3" failures="0" errors="0" time="0.617">
+    <testcase name="status code is 201" time="0.617" classname="2CreateUser"/>
+    <testcase name="Content type is :" time="0.617" classname="2CreateUser"/>
+    <testcase name="name validation" time="0.617" classname="2CreateUser"/>
+  </testsuite>
+  <testsuite name="3-GetUser" id="7719304c-1f00-40c5-b943-cd4977aa63a8" timestamp="2025-02-27T13:27:31.776Z" tests="2" failures="0" errors="0" time="0.545">
+    <testcase name="Status code is 200" time="0.545" classname="3GetUser"/>
+    <testcase name="check user ID" time="0.545" classname="3GetUser"/>
+  </testsuite>
+  <testsuite name="4-UpdateUser" id="5267dd7d-7a10-40f9-b319-71562e394314" timestamp="2025-02-27T13:27:31.776Z" tests="1" failures="0" errors="0" time="0.808">
+    <testcase name="Status code is 200" time="0.808" classname="4UpdateUser"/>
+  </testsuite>
+  <testsuite name="5-Delete_User" id="9bd2305b-2efb-4bc7-81f7-34e6f39ca520" timestamp="2025-02-27T13:27:31.776Z" tests="1" failures="0" errors="0" time="0.551">
+    <testcase name="Status code is 204" time="0.551" classname="5DeleteUser"/>
+  </testsuite>
+  <testsuite name="6-CheckDeleteUser" id="381cdd5e-bf4c-4498-a730-534ce02923f4" timestamp="2025-02-27T13:27:31.776Z" tests="1" failures="0" errors="0" time="0.507">
+    <testcase name="Status code is 404" time="0.507" classname="6CheckDeleteUser"/>
+  </testsuite>
+</testsuites>
