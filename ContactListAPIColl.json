@@ -1,0 +1,347 @@
+{
+	"info": {
+		"_postman_id": "ba0c0555-0a75-4ea2-845c-3b85c471a728",
+		"name": "ContactListAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "41844441"
+	},
+	"item": [
+		{
+			"name": "GETRequest",
+			"item": [
+				{
+					"name": "getUsersList",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var template = `\r",
+									"\r",
+									" <table bgcolor=\"#FFFFFH\">\r",
+									"\r",
+									" <tr bgcolor=\"#ff7f39\">\r",
+									"\r",
+									" <th>ID</th>\r",
+									"\r",
+									" <th>Title</th>\r",
+									"\r",
+									" <th>Content</th>\r",
+									"\r",
+									" <th>CreatedAt</th>\r",
+									"\r",
+									" <th>UpdatedAt</th>\r",
+									"\r",
+									" </tr>\r",
+									"\r",
+									" {{#each response}}\r",
+									"\r",
+									" <tr>\r",
+									"\r",
+									" <td>{{id}}</td>\r",
+									"\r",
+									" <td>{{title}}</td>\r",
+									"\r",
+									" <td>{{content}}</td>\r",
+									"\r",
+									" <td>{{createdAt}}</td>\r",
+									"\r",
+									" <td>{{updatedAt}}</td>\r",
+									"\r",
+									"\r",
+									"\r",
+									" </tr>\r",
+									"\r",
+									" {{/each}}\r",
+									"\r",
+									" </table>\r",
+									"\r",
+									"`;\r",
+									"\r",
+									"pm.visualizer.set(template, {response : pm.response.json()});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{TokenID}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/contacts",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"contacts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getSingleUser",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{vault:UsersToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts/67b0832d2a3be800134e752b",
+							"protocol": "https",
+							"host": [
+								"thinking-tester-contact-list",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"contacts",
+								"67b0832d2a3be800134e752b"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PUTRequest",
+			"item": [
+				{
+					"name": "New Request",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{vault:UsersToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Mary\",\r\n    \"lastName\": \"Citimortgage\",\r\n    \"birthdate\": \"1970-01-01\",\r\n    \"email\": \"mary@gmail.com\",\r\n    \"phone\": \"9090909090\",\r\n    \"street1\": \"1 Main St.\",\r\n    \"street2\": \"Apartment A\",\r\n    \"city\": \"CA\",\r\n    \"stateProvince\": \"CA\",\r\n    \"postalCode\": \"95123\",\r\n    \"country\": \"USA\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts/67b0832d2a3be800134e752b",
+							"protocol": "https",
+							"host": [
+								"thinking-tester-contact-list",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"contacts",
+								"67b0832d2a3be800134e752b"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "POSTRequest",
+			"item": [
+				{
+					"name": "New Request",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{vault:UsersToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n    {\r\n        \"firstName\": \"Cora\",\r\n        \r\n        \"birthdate\": \"1970-01-01\",\r\n        \"email\": \"cora@gmail.com\",\r\n        \"phone\": \"9090909090\",\r\n        \"street1\": \"1 Main St.\",\r\n        \"street2\": \"Apartment A\",\r\n        \"city\": \"CA\",\r\n        \"stateProvince\": \"CA\",\r\n        \"postalCode\": \"95123\",\r\n        \"country\": \"USA\"\r\n    }\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts",
+							"protocol": "https",
+							"host": [
+								"thinking-tester-contact-list",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"contacts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{vault:UsersToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \r\n  \"firstName\": \"Shruti\",\r\n  \"lastName\": \"Mishra\",\r\n  \"birthdate\": \"1970-01-01\",\r\n  \"email\": \"shruti@gmail.com\",\r\n  \"phone\": \"9090909090\",\r\n  \"street1\": \"1 Main St.\",\r\n  \"street2\": \"Apartment A\",\r\n  \"city\": \"Pune\",\r\n  \"stateProvince\": \"Maharastra\",\r\n  \"postalCode\": \"411057\",\r\n  \"country\": \"India\"\r\n  \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts/",
+							"protocol": "https",
+							"host": [
+								"thinking-tester-contact-list",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"contacts",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "DeleteRequest",
+			"item": [
+				{
+					"name": "New Request",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2E4NzZiNDRmN2NkMjAwMTMxNGE0ZWMiLCJpYXQiOjE3MzkwOTM2ODR9.mdBwADLC_oglceENNvp_EHQtGrFpfNCLQ2dftkLiOEg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts/67a8773e4f7cd2001314a4ef",
+							"protocol": "https",
+							"host": [
+								"thinking-tester-contact-list",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"contacts",
+								"67a8773e4f7cd2001314a4ef"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "HeadAndOptionsReq",
+			"item": [
+				{
+					"name": "New Request",
+					"request": {
+						"method": "HEAD",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2E4NzZiNDRmN2NkMjAwMTMxNGE0ZWMiLCJpYXQiOjE3MzkwOTM2ODR9.mdBwADLC_oglceENNvp_EHQtGrFpfNCLQ2dftkLiOEg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts/",
+							"protocol": "https",
+							"host": [
+								"thinking-tester-contact-list",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"contacts",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "OPTIONS",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2E4NzZiNDRmN2NkMjAwMTMxNGE0ZWMiLCJpYXQiOjE3MzkwOTM2ODR9.mdBwADLC_oglceENNvp_EHQtGrFpfNCLQ2dftkLiOEg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts/",
+							"protocol": "https",
+							"host": [
+								"thinking-tester-contact-list",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"contacts",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
