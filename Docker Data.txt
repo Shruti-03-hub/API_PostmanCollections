@@ -1,0 +1,15 @@
+
+Docker Images
+docker pull shruti349/gorestapi:1.0
+docker pull shruti349/boookingapiworkflow:1.0
+
+Docker hub :URL - https://hub.docker.com/r/shruti349/gorestapi/tags
+
+rm -rf newman/*.html #delete all previous reports
+
+newman run C:\Users\DELL\Documents\API_Training\ExportedCollections\GorestAPI_workflow.json -e C:\Users\DELL\Documents\API_Training\ExportedCollections\Gorest_Env.json --verbose -r cli,htmlextra,json
+
+
+>git remote add origin https://github.com/Shruti-03-hub/API_PostmanCollections.git
+
+https://github.com/Shruti-03-hub/API_PostmanCollections/tree/master
