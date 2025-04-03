@@ -28,7 +28,7 @@ pipeline {
 
         stage('Run API Test Cases') {
             steps {
-                'docker run -v C:/Users/DELL/.jenkins/workspace/PostmanRunWithPipeline/newman:/app/results shruti349/gorestddt:1.0'
+                bat 'docker run -v C:/Users/DELL/.jenkins/workspace/PostmanRunWithPipeline/newman:/app/results shruti349/gorestddt:1.0'
             }
         }
 
